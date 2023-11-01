@@ -1,0 +1,9 @@
+name: flutter_bullet
+description: Bullet Physics For Flutter
+version: 0.0.1
+
+environment:
+  sdk: '>=3.0.0'
+
+dev_dependencies:
+  test:
