@@ -1,6 +1,20 @@
 .dart_tool/
 .packages
 build/
+
+.DS_Store
+.atom/
+.idea
+.packages
+.pub/
+.dart_tool/
+.vscode/
+*.iml
+
+# Gradle?
+.uuid
+
+pubspec.lock
 # If you're building an application, you may want to check-in your pubspec.lock
 pubspec.lock
 
@@ -22,3 +36,16 @@ doc/api/
 
 .flutter-plugins
 .flutter-plugins-dependencies
+
+CMakeLists.txt.user
+CMakeCache.txt
+CMakeFiles
+CMakeScripts
+Testing
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+_deps
+*.dylib
