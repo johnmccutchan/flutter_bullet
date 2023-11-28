@@ -2,6 +2,7 @@ import 'package:flutter_bullet/flutter_bullet.dart';
 import 'package:vector_math/vector_math.dart';
 
 main() {
+  // Create a physics world. Gravity is -Y.
   var world = World();
 
   // Create a unit box
@@ -21,8 +22,10 @@ main() {
   world.addBody(dynamicBody);
   world.addBody(floorBody);
 
+  // 1/60.
   final dt = 0.0625;
 
+  // 200 steps.
   for (int i = 0; i < 200; i++) {
     world.step(dt);
     var origin = dynamicBody.origin;

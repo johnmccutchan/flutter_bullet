@@ -38,6 +38,8 @@ class World implements ffi.Finalizable {
 
   ffi.Pointer<wpWorld> _nativeWorld;
 
+  Set<RigidBody> _bodies = new Set<RigidBody>();
+
   World._(this._nativeWorld);
 
   factory World() {
@@ -53,10 +55,18 @@ class World implements ffi.Finalizable {
   }
 
   void addBody(RigidBody body) {
+    if (!_bodies.add(body)) {
+      // Already added.
+      return;
+    }
     _bindings.world_add_rigid_body(_nativeWorld, body._nativeBody);
   }
 
   void removeBody(RigidBody body) {
+    if (!_bodies.remove(body)) {
+      // Never added.
+      return;
+    }
     _bindings.world_remove_rigid_body(_nativeWorld, body._nativeBody);
   }
 }
