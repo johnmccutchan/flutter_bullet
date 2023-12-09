@@ -9,7 +9,7 @@ const String _libName = 'flutter_bullet';
 /// The dynamic library in which the symbols for [FlutterBulletBindings] can be found.
 final ffi.DynamicLibrary _dylib = () {
   if (Platform.isMacOS || Platform.isIOS) {
-    return ffi.DynamicLibrary.open('flutter_bullet_library/lib$_libName.dylib');
+    return ffi.DynamicLibrary.open('native/lib$_libName.dylib');
   }
   if (Platform.isAndroid || Platform.isLinux) {
     return ffi.DynamicLibrary.open('lib$_libName.so');

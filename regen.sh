@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 
-pushd flutter_bullet_library
+pushd native
 make
 popd
 dart run ffigen --config ffigen.yaml
