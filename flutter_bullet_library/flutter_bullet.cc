@@ -29,6 +29,9 @@
 #include "bullet3/src/BulletCollision/CollisionShapes/btBoxShape.h"
 #include "bullet3/src/BulletCollision/CollisionShapes/btStaticPlaneShape.h"
 
+#include "dart_api.h"
+#include "dart_api_dl.h"
+
 class WrappedPhysicsWorld {
  public:
   WrappedPhysicsWorld() {
@@ -124,6 +127,23 @@ FFI_PLUGIN_EXPORT wpBody* create_rigid_body(float mass, wpShape* shape, float tx
   return reinterpret_cast<wpBody*>(new btRigidBody(mass, motionState, _shape, localInertia));
 }
 
+static void NoopFinalizer(void* isolate_callback_data, void* peer) {
+  // We must pass in a non-null callback to Dart_NewWeakPersistentHandle_DL.
+}
+
+FFI_PLUGIN_EXPORT void set_rigid_body_user_data(wpBody* body, Dart_Handle ref) {
+  btRigidBody* _body = reinterpret_cast<btRigidBody*>(body);
+  Dart_WeakPersistentHandle weak_ref = Dart_NewWeakPersistentHandle_DL(ref, nullptr, 0, NoopFinalizer);
+  void* user_data = reinterpret_cast<void*>(weak_ref);
+  _body->setUserPointer(user_data);
+}
+
+FFI_PLUGIN_EXPORT Dart_Handle get_rigid_body_user_data(wpBody* body) {
+  btRigidBody* _body = reinterpret_cast<btRigidBody*>(body);
+  void* user_data = _body->getUserPointer();
+  return Dart_HandleFromWeakPersistent_DL(reinterpret_cast<Dart_WeakPersistentHandle>(_body->getUserPointer()));
+}
+
 FFI_PLUGIN_EXPORT const float* rigid_body_get_origin(wpBody* body) {
   btRigidBody* _body = reinterpret_cast<btRigidBody*>(body);
   return static_cast<const btScalar*>(_body->getCenterOfMassPosition());
@@ -131,6 +151,10 @@ FFI_PLUGIN_EXPORT const float* rigid_body_get_origin(wpBody* body) {
 
 FFI_PLUGIN_EXPORT void destroy_rigid_body(wpBody* body) {
   btRigidBody* _body = reinterpret_cast<btRigidBody*>(body);
+  void* user_data = _body->getUserPointer();
+  if (user_data != nullptr) {
+    Dart_DeleteWeakPersistentHandle_DL(reinterpret_cast<Dart_WeakPersistentHandle>(user_data));
+  }
   btMotionState* motionState = _body->getMotionState();
   delete motionState;
   delete _body;

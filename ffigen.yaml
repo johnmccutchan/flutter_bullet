@@ -8,8 +8,10 @@ output: 'lib/src/flutter_bullet_bindings_generated.dart'
 headers:
   entry-points:
     - 'flutter_bullet_library/flutter_bullet.h'
+    - 'flutter_bullet_library/dart_api_dl.h'
   include-directives:
     - 'flutter_bullet_library/flutter_bullet.h'
+    - 'flutter_bullet_library/dart_api_dl.h'
 functions:
   symbol-address:
     include:

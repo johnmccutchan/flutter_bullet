@@ -27,6 +27,385 @@ class FlutterBulletBindings {
           lookup)
       : _lookup = lookup;
 
+  /// \mainpage Dynamically Linked Dart API
+  ///
+  /// This exposes a subset of symbols from dart_api.h and dart_native_api.h
+  /// available in every Dart embedder through dynamic linking.
+  ///
+  /// All symbols are postfixed with _DL to indicate that they are dynamically
+  /// linked and to prevent conflicts with the original symbol.
+  ///
+  /// Link `dart_api_dl.c` file into your library and invoke
+  /// `Dart_InitializeApiDL` with `NativeApi.initializeApiDLData`.
+  ///
+  /// Returns 0 on success.
+  int Dart_InitializeApiDL(
+    ffi.Pointer<ffi.Void> data,
+  ) {
+    return _Dart_InitializeApiDL(
+      data,
+    );
+  }
+
+  late final _Dart_InitializeApiDLPtr =
+      _lookup<ffi.NativeFunction<ffi.IntPtr Function(ffi.Pointer<ffi.Void>)>>(
+          'Dart_InitializeApiDL');
+  late final _Dart_InitializeApiDL = _Dart_InitializeApiDLPtr.asFunction<
+      int Function(ffi.Pointer<ffi.Void>)>();
+
+  late final ffi.Pointer<Dart_PostCObject_Type> _Dart_PostCObject_DL =
+      _lookup<Dart_PostCObject_Type>('Dart_PostCObject_DL');
+
+  Dart_PostCObject_Type get Dart_PostCObject_DL => _Dart_PostCObject_DL.value;
+
+  set Dart_PostCObject_DL(Dart_PostCObject_Type value) =>
+      _Dart_PostCObject_DL.value = value;
+
+  late final ffi.Pointer<Dart_PostInteger_Type> _Dart_PostInteger_DL =
+      _lookup<Dart_PostInteger_Type>('Dart_PostInteger_DL');
+
+  Dart_PostInteger_Type get Dart_PostInteger_DL => _Dart_PostInteger_DL.value;
+
+  set Dart_PostInteger_DL(Dart_PostInteger_Type value) =>
+      _Dart_PostInteger_DL.value = value;
+
+  late final ffi.Pointer<Dart_NewNativePort_Type> _Dart_NewNativePort_DL =
+      _lookup<Dart_NewNativePort_Type>('Dart_NewNativePort_DL');
+
+  Dart_NewNativePort_Type get Dart_NewNativePort_DL =>
+      _Dart_NewNativePort_DL.value;
+
+  set Dart_NewNativePort_DL(Dart_NewNativePort_Type value) =>
+      _Dart_NewNativePort_DL.value = value;
+
+  late final ffi.Pointer<Dart_CloseNativePort_Type> _Dart_CloseNativePort_DL =
+      _lookup<Dart_CloseNativePort_Type>('Dart_CloseNativePort_DL');
+
+  Dart_CloseNativePort_Type get Dart_CloseNativePort_DL =>
+      _Dart_CloseNativePort_DL.value;
+
+  set Dart_CloseNativePort_DL(Dart_CloseNativePort_Type value) =>
+      _Dart_CloseNativePort_DL.value = value;
+
+  late final ffi.Pointer<Dart_IsError_Type> _Dart_IsError_DL =
+      _lookup<Dart_IsError_Type>('Dart_IsError_DL');
+
+  Dart_IsError_Type get Dart_IsError_DL => _Dart_IsError_DL.value;
+
+  set Dart_IsError_DL(Dart_IsError_Type value) =>
+      _Dart_IsError_DL.value = value;
+
+  late final ffi.Pointer<Dart_IsApiError_Type> _Dart_IsApiError_DL =
+      _lookup<Dart_IsApiError_Type>('Dart_IsApiError_DL');
+
+  Dart_IsApiError_Type get Dart_IsApiError_DL => _Dart_IsApiError_DL.value;
+
+  set Dart_IsApiError_DL(Dart_IsApiError_Type value) =>
+      _Dart_IsApiError_DL.value = value;
+
+  late final ffi.Pointer<Dart_IsUnhandledExceptionError_Type>
+      _Dart_IsUnhandledExceptionError_DL =
+      _lookup<Dart_IsUnhandledExceptionError_Type>(
+          'Dart_IsUnhandledExceptionError_DL');
+
+  Dart_IsUnhandledExceptionError_Type get Dart_IsUnhandledExceptionError_DL =>
+      _Dart_IsUnhandledExceptionError_DL.value;
+
+  set Dart_IsUnhandledExceptionError_DL(
+          Dart_IsUnhandledExceptionError_Type value) =>
+      _Dart_IsUnhandledExceptionError_DL.value = value;
+
+  late final ffi.Pointer<Dart_IsCompilationError_Type>
+      _Dart_IsCompilationError_DL =
+      _lookup<Dart_IsCompilationError_Type>('Dart_IsCompilationError_DL');
+
+  Dart_IsCompilationError_Type get Dart_IsCompilationError_DL =>
+      _Dart_IsCompilationError_DL.value;
+
+  set Dart_IsCompilationError_DL(Dart_IsCompilationError_Type value) =>
+      _Dart_IsCompilationError_DL.value = value;
+
+  late final ffi.Pointer<Dart_IsFatalError_Type> _Dart_IsFatalError_DL =
+      _lookup<Dart_IsFatalError_Type>('Dart_IsFatalError_DL');
+
+  Dart_IsFatalError_Type get Dart_IsFatalError_DL =>
+      _Dart_IsFatalError_DL.value;
+
+  set Dart_IsFatalError_DL(Dart_IsFatalError_Type value) =>
+      _Dart_IsFatalError_DL.value = value;
+
+  late final ffi.Pointer<Dart_GetError_Type> _Dart_GetError_DL =
+      _lookup<Dart_GetError_Type>('Dart_GetError_DL');
+
+  Dart_GetError_Type get Dart_GetError_DL => _Dart_GetError_DL.value;
+
+  set Dart_GetError_DL(Dart_GetError_Type value) =>
+      _Dart_GetError_DL.value = value;
+
+  late final ffi.Pointer<Dart_ErrorHasException_Type>
+      _Dart_ErrorHasException_DL =
+      _lookup<Dart_ErrorHasException_Type>('Dart_ErrorHasException_DL');
+
+  Dart_ErrorHasException_Type get Dart_ErrorHasException_DL =>
+      _Dart_ErrorHasException_DL.value;
+
+  set Dart_ErrorHasException_DL(Dart_ErrorHasException_Type value) =>
+      _Dart_ErrorHasException_DL.value = value;
+
+  late final ffi.Pointer<Dart_ErrorGetException_Type>
+      _Dart_ErrorGetException_DL =
+      _lookup<Dart_ErrorGetException_Type>('Dart_ErrorGetException_DL');
+
+  Dart_ErrorGetException_Type get Dart_ErrorGetException_DL =>
+      _Dart_ErrorGetException_DL.value;
+
+  set Dart_ErrorGetException_DL(Dart_ErrorGetException_Type value) =>
+      _Dart_ErrorGetException_DL.value = value;
+
+  late final ffi.Pointer<Dart_ErrorGetStackTrace_Type>
+      _Dart_ErrorGetStackTrace_DL =
+      _lookup<Dart_ErrorGetStackTrace_Type>('Dart_ErrorGetStackTrace_DL');
+
+  Dart_ErrorGetStackTrace_Type get Dart_ErrorGetStackTrace_DL =>
+      _Dart_ErrorGetStackTrace_DL.value;
+
+  set Dart_ErrorGetStackTrace_DL(Dart_ErrorGetStackTrace_Type value) =>
+      _Dart_ErrorGetStackTrace_DL.value = value;
+
+  late final ffi.Pointer<Dart_NewApiError_Type> _Dart_NewApiError_DL =
+      _lookup<Dart_NewApiError_Type>('Dart_NewApiError_DL');
+
+  Dart_NewApiError_Type get Dart_NewApiError_DL => _Dart_NewApiError_DL.value;
+
+  set Dart_NewApiError_DL(Dart_NewApiError_Type value) =>
+      _Dart_NewApiError_DL.value = value;
+
+  late final ffi.Pointer<Dart_NewCompilationError_Type>
+      _Dart_NewCompilationError_DL =
+      _lookup<Dart_NewCompilationError_Type>('Dart_NewCompilationError_DL');
+
+  Dart_NewCompilationError_Type get Dart_NewCompilationError_DL =>
+      _Dart_NewCompilationError_DL.value;
+
+  set Dart_NewCompilationError_DL(Dart_NewCompilationError_Type value) =>
+      _Dart_NewCompilationError_DL.value = value;
+
+  late final ffi.Pointer<Dart_NewUnhandledExceptionError_Type>
+      _Dart_NewUnhandledExceptionError_DL =
+      _lookup<Dart_NewUnhandledExceptionError_Type>(
+          'Dart_NewUnhandledExceptionError_DL');
+
+  Dart_NewUnhandledExceptionError_Type get Dart_NewUnhandledExceptionError_DL =>
+      _Dart_NewUnhandledExceptionError_DL.value;
+
+  set Dart_NewUnhandledExceptionError_DL(
+          Dart_NewUnhandledExceptionError_Type value) =>
+      _Dart_NewUnhandledExceptionError_DL.value = value;
+
+  late final ffi.Pointer<Dart_PropagateError_Type> _Dart_PropagateError_DL =
+      _lookup<Dart_PropagateError_Type>('Dart_PropagateError_DL');
+
+  Dart_PropagateError_Type get Dart_PropagateError_DL =>
+      _Dart_PropagateError_DL.value;
+
+  set Dart_PropagateError_DL(Dart_PropagateError_Type value) =>
+      _Dart_PropagateError_DL.value = value;
+
+  late final ffi.Pointer<Dart_HandleFromPersistent_Type>
+      _Dart_HandleFromPersistent_DL =
+      _lookup<Dart_HandleFromPersistent_Type>('Dart_HandleFromPersistent_DL');
+
+  Dart_HandleFromPersistent_Type get Dart_HandleFromPersistent_DL =>
+      _Dart_HandleFromPersistent_DL.value;
+
+  set Dart_HandleFromPersistent_DL(Dart_HandleFromPersistent_Type value) =>
+      _Dart_HandleFromPersistent_DL.value = value;
+
+  late final ffi.Pointer<Dart_HandleFromWeakPersistent_Type>
+      _Dart_HandleFromWeakPersistent_DL =
+      _lookup<Dart_HandleFromWeakPersistent_Type>(
+          'Dart_HandleFromWeakPersistent_DL');
+
+  Dart_HandleFromWeakPersistent_Type get Dart_HandleFromWeakPersistent_DL =>
+      _Dart_HandleFromWeakPersistent_DL.value;
+
+  set Dart_HandleFromWeakPersistent_DL(
+          Dart_HandleFromWeakPersistent_Type value) =>
+      _Dart_HandleFromWeakPersistent_DL.value = value;
+
+  late final ffi.Pointer<Dart_NewPersistentHandle_Type>
+      _Dart_NewPersistentHandle_DL =
+      _lookup<Dart_NewPersistentHandle_Type>('Dart_NewPersistentHandle_DL');
+
+  Dart_NewPersistentHandle_Type get Dart_NewPersistentHandle_DL =>
+      _Dart_NewPersistentHandle_DL.value;
+
+  set Dart_NewPersistentHandle_DL(Dart_NewPersistentHandle_Type value) =>
+      _Dart_NewPersistentHandle_DL.value = value;
+
+  late final ffi.Pointer<Dart_SetPersistentHandle_Type>
+      _Dart_SetPersistentHandle_DL =
+      _lookup<Dart_SetPersistentHandle_Type>('Dart_SetPersistentHandle_DL');
+
+  Dart_SetPersistentHandle_Type get Dart_SetPersistentHandle_DL =>
+      _Dart_SetPersistentHandle_DL.value;
+
+  set Dart_SetPersistentHandle_DL(Dart_SetPersistentHandle_Type value) =>
+      _Dart_SetPersistentHandle_DL.value = value;
+
+  late final ffi.Pointer<Dart_DeletePersistentHandle_Type>
+      _Dart_DeletePersistentHandle_DL =
+      _lookup<Dart_DeletePersistentHandle_Type>(
+          'Dart_DeletePersistentHandle_DL');
+
+  Dart_DeletePersistentHandle_Type get Dart_DeletePersistentHandle_DL =>
+      _Dart_DeletePersistentHandle_DL.value;
+
+  set Dart_DeletePersistentHandle_DL(Dart_DeletePersistentHandle_Type value) =>
+      _Dart_DeletePersistentHandle_DL.value = value;
+
+  late final ffi.Pointer<Dart_NewWeakPersistentHandle_Type>
+      _Dart_NewWeakPersistentHandle_DL =
+      _lookup<Dart_NewWeakPersistentHandle_Type>(
+          'Dart_NewWeakPersistentHandle_DL');
+
+  Dart_NewWeakPersistentHandle_Type get Dart_NewWeakPersistentHandle_DL =>
+      _Dart_NewWeakPersistentHandle_DL.value;
+
+  set Dart_NewWeakPersistentHandle_DL(
+          Dart_NewWeakPersistentHandle_Type value) =>
+      _Dart_NewWeakPersistentHandle_DL.value = value;
+
+  late final ffi.Pointer<Dart_DeleteWeakPersistentHandle_Type>
+      _Dart_DeleteWeakPersistentHandle_DL =
+      _lookup<Dart_DeleteWeakPersistentHandle_Type>(
+          'Dart_DeleteWeakPersistentHandle_DL');
+
+  Dart_DeleteWeakPersistentHandle_Type get Dart_DeleteWeakPersistentHandle_DL =>
+      _Dart_DeleteWeakPersistentHandle_DL.value;
+
+  set Dart_DeleteWeakPersistentHandle_DL(
+          Dart_DeleteWeakPersistentHandle_Type value) =>
+      _Dart_DeleteWeakPersistentHandle_DL.value = value;
+
+  late final ffi.Pointer<Dart_NewFinalizableHandle_Type>
+      _Dart_NewFinalizableHandle_DL =
+      _lookup<Dart_NewFinalizableHandle_Type>('Dart_NewFinalizableHandle_DL');
+
+  Dart_NewFinalizableHandle_Type get Dart_NewFinalizableHandle_DL =>
+      _Dart_NewFinalizableHandle_DL.value;
+
+  set Dart_NewFinalizableHandle_DL(Dart_NewFinalizableHandle_Type value) =>
+      _Dart_NewFinalizableHandle_DL.value = value;
+
+  late final ffi.Pointer<Dart_DeleteFinalizableHandle_Type>
+      _Dart_DeleteFinalizableHandle_DL =
+      _lookup<Dart_DeleteFinalizableHandle_Type>(
+          'Dart_DeleteFinalizableHandle_DL');
+
+  Dart_DeleteFinalizableHandle_Type get Dart_DeleteFinalizableHandle_DL =>
+      _Dart_DeleteFinalizableHandle_DL.value;
+
+  set Dart_DeleteFinalizableHandle_DL(
+          Dart_DeleteFinalizableHandle_Type value) =>
+      _Dart_DeleteFinalizableHandle_DL.value = value;
+
+  late final ffi.Pointer<Dart_CurrentIsolate_Type> _Dart_CurrentIsolate_DL =
+      _lookup<Dart_CurrentIsolate_Type>('Dart_CurrentIsolate_DL');
+
+  Dart_CurrentIsolate_Type get Dart_CurrentIsolate_DL =>
+      _Dart_CurrentIsolate_DL.value;
+
+  set Dart_CurrentIsolate_DL(Dart_CurrentIsolate_Type value) =>
+      _Dart_CurrentIsolate_DL.value = value;
+
+  late final ffi.Pointer<Dart_ExitIsolate_Type> _Dart_ExitIsolate_DL =
+      _lookup<Dart_ExitIsolate_Type>('Dart_ExitIsolate_DL');
+
+  Dart_ExitIsolate_Type get Dart_ExitIsolate_DL => _Dart_ExitIsolate_DL.value;
+
+  set Dart_ExitIsolate_DL(Dart_ExitIsolate_Type value) =>
+      _Dart_ExitIsolate_DL.value = value;
+
+  late final ffi.Pointer<Dart_EnterIsolate_Type> _Dart_EnterIsolate_DL =
+      _lookup<Dart_EnterIsolate_Type>('Dart_EnterIsolate_DL');
+
+  Dart_EnterIsolate_Type get Dart_EnterIsolate_DL =>
+      _Dart_EnterIsolate_DL.value;
+
+  set Dart_EnterIsolate_DL(Dart_EnterIsolate_Type value) =>
+      _Dart_EnterIsolate_DL.value = value;
+
+  late final ffi.Pointer<Dart_Post_Type> _Dart_Post_DL =
+      _lookup<Dart_Post_Type>('Dart_Post_DL');
+
+  Dart_Post_Type get Dart_Post_DL => _Dart_Post_DL.value;
+
+  set Dart_Post_DL(Dart_Post_Type value) => _Dart_Post_DL.value = value;
+
+  late final ffi.Pointer<Dart_NewSendPort_Type> _Dart_NewSendPort_DL =
+      _lookup<Dart_NewSendPort_Type>('Dart_NewSendPort_DL');
+
+  Dart_NewSendPort_Type get Dart_NewSendPort_DL => _Dart_NewSendPort_DL.value;
+
+  set Dart_NewSendPort_DL(Dart_NewSendPort_Type value) =>
+      _Dart_NewSendPort_DL.value = value;
+
+  late final ffi.Pointer<Dart_SendPortGetId_Type> _Dart_SendPortGetId_DL =
+      _lookup<Dart_SendPortGetId_Type>('Dart_SendPortGetId_DL');
+
+  Dart_SendPortGetId_Type get Dart_SendPortGetId_DL =>
+      _Dart_SendPortGetId_DL.value;
+
+  set Dart_SendPortGetId_DL(Dart_SendPortGetId_Type value) =>
+      _Dart_SendPortGetId_DL.value = value;
+
+  late final ffi.Pointer<Dart_EnterScope_Type> _Dart_EnterScope_DL =
+      _lookup<Dart_EnterScope_Type>('Dart_EnterScope_DL');
+
+  Dart_EnterScope_Type get Dart_EnterScope_DL => _Dart_EnterScope_DL.value;
+
+  set Dart_EnterScope_DL(Dart_EnterScope_Type value) =>
+      _Dart_EnterScope_DL.value = value;
+
+  late final ffi.Pointer<Dart_ExitScope_Type> _Dart_ExitScope_DL =
+      _lookup<Dart_ExitScope_Type>('Dart_ExitScope_DL');
+
+  Dart_ExitScope_Type get Dart_ExitScope_DL => _Dart_ExitScope_DL.value;
+
+  set Dart_ExitScope_DL(Dart_ExitScope_Type value) =>
+      _Dart_ExitScope_DL.value = value;
+
+  late final ffi.Pointer<Dart_IsNull_Type> _Dart_IsNull_DL =
+      _lookup<Dart_IsNull_Type>('Dart_IsNull_DL');
+
+  Dart_IsNull_Type get Dart_IsNull_DL => _Dart_IsNull_DL.value;
+
+  set Dart_IsNull_DL(Dart_IsNull_Type value) => _Dart_IsNull_DL.value = value;
+
+  late final ffi.Pointer<Dart_UpdateExternalSize_Type>
+      _Dart_UpdateExternalSize_DL =
+      _lookup<Dart_UpdateExternalSize_Type>('Dart_UpdateExternalSize_DL');
+
+  Dart_UpdateExternalSize_Type get Dart_UpdateExternalSize_DL =>
+      _Dart_UpdateExternalSize_DL.value;
+
+  set Dart_UpdateExternalSize_DL(Dart_UpdateExternalSize_Type value) =>
+      _Dart_UpdateExternalSize_DL.value = value;
+
+  late final ffi.Pointer<Dart_UpdateFinalizableExternalSize_Type>
+      _Dart_UpdateFinalizableExternalSize_DL =
+      _lookup<Dart_UpdateFinalizableExternalSize_Type>(
+          'Dart_UpdateFinalizableExternalSize_DL');
+
+  Dart_UpdateFinalizableExternalSize_Type
+      get Dart_UpdateFinalizableExternalSize_DL =>
+          _Dart_UpdateFinalizableExternalSize_DL.value;
+
+  set Dart_UpdateFinalizableExternalSize_DL(
+          Dart_UpdateFinalizableExternalSize_Type value) =>
+      _Dart_UpdateFinalizableExternalSize_DL.value = value;
+
   ffi.Pointer<wpWorld> create_world() {
     return _create_world();
   }
@@ -180,6 +559,37 @@ class FlutterBulletBindings {
       ffi.Pointer<wpBody> Function(
           double, ffi.Pointer<wpShape>, double, double, double)>();
 
+  void set_rigid_body_user_data(
+    ffi.Pointer<wpBody> body,
+    Object ref,
+  ) {
+    return _set_rigid_body_user_data(
+      body,
+      ref,
+    );
+  }
+
+  late final _set_rigid_body_user_dataPtr = _lookup<
+          ffi
+          .NativeFunction<ffi.Void Function(ffi.Pointer<wpBody>, ffi.Handle)>>(
+      'set_rigid_body_user_data');
+  late final _set_rigid_body_user_data = _set_rigid_body_user_dataPtr
+      .asFunction<void Function(ffi.Pointer<wpBody>, Object)>();
+
+  Object get_rigid_body_user_data(
+    ffi.Pointer<wpBody> body,
+  ) {
+    return _get_rigid_body_user_data(
+      body,
+    );
+  }
+
+  late final _get_rigid_body_user_dataPtr =
+      _lookup<ffi.NativeFunction<ffi.Handle Function(ffi.Pointer<wpBody>)>>(
+          'get_rigid_body_user_data');
+  late final _get_rigid_body_user_data = _get_rigid_body_user_dataPtr
+      .asFunction<Object Function(ffi.Pointer<wpBody>)>();
+
   ffi.Pointer<ffi.Float> rigid_body_get_origin(
     ffi.Pointer<wpBody> body,
   ) {
@@ -215,6 +625,90 @@ class FlutterBulletBindings {
 class _SymbolAddresses {
   final FlutterBulletBindings _library;
   _SymbolAddresses(this._library);
+  ffi.Pointer<ffi.NativeFunction<ffi.IntPtr Function(ffi.Pointer<ffi.Void>)>>
+      get Dart_InitializeApiDL => _library._Dart_InitializeApiDLPtr;
+  ffi.Pointer<Dart_PostCObject_Type> get Dart_PostCObject_DL =>
+      _library._Dart_PostCObject_DL;
+  ffi.Pointer<Dart_PostInteger_Type> get Dart_PostInteger_DL =>
+      _library._Dart_PostInteger_DL;
+  ffi.Pointer<Dart_NewNativePort_Type> get Dart_NewNativePort_DL =>
+      _library._Dart_NewNativePort_DL;
+  ffi.Pointer<Dart_CloseNativePort_Type> get Dart_CloseNativePort_DL =>
+      _library._Dart_CloseNativePort_DL;
+  ffi.Pointer<Dart_IsError_Type> get Dart_IsError_DL =>
+      _library._Dart_IsError_DL;
+  ffi.Pointer<Dart_IsApiError_Type> get Dart_IsApiError_DL =>
+      _library._Dart_IsApiError_DL;
+  ffi.Pointer<Dart_IsUnhandledExceptionError_Type>
+      get Dart_IsUnhandledExceptionError_DL =>
+          _library._Dart_IsUnhandledExceptionError_DL;
+  ffi.Pointer<Dart_IsCompilationError_Type> get Dart_IsCompilationError_DL =>
+      _library._Dart_IsCompilationError_DL;
+  ffi.Pointer<Dart_IsFatalError_Type> get Dart_IsFatalError_DL =>
+      _library._Dart_IsFatalError_DL;
+  ffi.Pointer<Dart_GetError_Type> get Dart_GetError_DL =>
+      _library._Dart_GetError_DL;
+  ffi.Pointer<Dart_ErrorHasException_Type> get Dart_ErrorHasException_DL =>
+      _library._Dart_ErrorHasException_DL;
+  ffi.Pointer<Dart_ErrorGetException_Type> get Dart_ErrorGetException_DL =>
+      _library._Dart_ErrorGetException_DL;
+  ffi.Pointer<Dart_ErrorGetStackTrace_Type> get Dart_ErrorGetStackTrace_DL =>
+      _library._Dart_ErrorGetStackTrace_DL;
+  ffi.Pointer<Dart_NewApiError_Type> get Dart_NewApiError_DL =>
+      _library._Dart_NewApiError_DL;
+  ffi.Pointer<Dart_NewCompilationError_Type> get Dart_NewCompilationError_DL =>
+      _library._Dart_NewCompilationError_DL;
+  ffi.Pointer<Dart_NewUnhandledExceptionError_Type>
+      get Dart_NewUnhandledExceptionError_DL =>
+          _library._Dart_NewUnhandledExceptionError_DL;
+  ffi.Pointer<Dart_PropagateError_Type> get Dart_PropagateError_DL =>
+      _library._Dart_PropagateError_DL;
+  ffi.Pointer<Dart_HandleFromPersistent_Type>
+      get Dart_HandleFromPersistent_DL =>
+          _library._Dart_HandleFromPersistent_DL;
+  ffi.Pointer<Dart_HandleFromWeakPersistent_Type>
+      get Dart_HandleFromWeakPersistent_DL =>
+          _library._Dart_HandleFromWeakPersistent_DL;
+  ffi.Pointer<Dart_NewPersistentHandle_Type> get Dart_NewPersistentHandle_DL =>
+      _library._Dart_NewPersistentHandle_DL;
+  ffi.Pointer<Dart_SetPersistentHandle_Type> get Dart_SetPersistentHandle_DL =>
+      _library._Dart_SetPersistentHandle_DL;
+  ffi.Pointer<Dart_DeletePersistentHandle_Type>
+      get Dart_DeletePersistentHandle_DL =>
+          _library._Dart_DeletePersistentHandle_DL;
+  ffi.Pointer<Dart_NewWeakPersistentHandle_Type>
+      get Dart_NewWeakPersistentHandle_DL =>
+          _library._Dart_NewWeakPersistentHandle_DL;
+  ffi.Pointer<Dart_DeleteWeakPersistentHandle_Type>
+      get Dart_DeleteWeakPersistentHandle_DL =>
+          _library._Dart_DeleteWeakPersistentHandle_DL;
+  ffi.Pointer<Dart_NewFinalizableHandle_Type>
+      get Dart_NewFinalizableHandle_DL =>
+          _library._Dart_NewFinalizableHandle_DL;
+  ffi.Pointer<Dart_DeleteFinalizableHandle_Type>
+      get Dart_DeleteFinalizableHandle_DL =>
+          _library._Dart_DeleteFinalizableHandle_DL;
+  ffi.Pointer<Dart_CurrentIsolate_Type> get Dart_CurrentIsolate_DL =>
+      _library._Dart_CurrentIsolate_DL;
+  ffi.Pointer<Dart_ExitIsolate_Type> get Dart_ExitIsolate_DL =>
+      _library._Dart_ExitIsolate_DL;
+  ffi.Pointer<Dart_EnterIsolate_Type> get Dart_EnterIsolate_DL =>
+      _library._Dart_EnterIsolate_DL;
+  ffi.Pointer<Dart_Post_Type> get Dart_Post_DL => _library._Dart_Post_DL;
+  ffi.Pointer<Dart_NewSendPort_Type> get Dart_NewSendPort_DL =>
+      _library._Dart_NewSendPort_DL;
+  ffi.Pointer<Dart_SendPortGetId_Type> get Dart_SendPortGetId_DL =>
+      _library._Dart_SendPortGetId_DL;
+  ffi.Pointer<Dart_EnterScope_Type> get Dart_EnterScope_DL =>
+      _library._Dart_EnterScope_DL;
+  ffi.Pointer<Dart_ExitScope_Type> get Dart_ExitScope_DL =>
+      _library._Dart_ExitScope_DL;
+  ffi.Pointer<Dart_IsNull_Type> get Dart_IsNull_DL => _library._Dart_IsNull_DL;
+  ffi.Pointer<Dart_UpdateExternalSize_Type> get Dart_UpdateExternalSize_DL =>
+      _library._Dart_UpdateExternalSize_DL;
+  ffi.Pointer<Dart_UpdateFinalizableExternalSize_Type>
+      get Dart_UpdateFinalizableExternalSize_DL =>
+          _library._Dart_UpdateFinalizableExternalSize_DL;
   ffi.Pointer<ffi.NativeFunction<ffi.Pointer<wpWorld> Function()>>
       get create_world => _library._create_worldPtr;
   ffi.Pointer<
@@ -253,11 +747,331 @@ class _SymbolAddresses {
       _library._create_rigid_bodyPtr;
   ffi.Pointer<
           ffi
+          .NativeFunction<ffi.Void Function(ffi.Pointer<wpBody>, ffi.Handle)>>
+      get set_rigid_body_user_data => _library._set_rigid_body_user_dataPtr;
+  ffi.Pointer<ffi.NativeFunction<ffi.Handle Function(ffi.Pointer<wpBody>)>>
+      get get_rigid_body_user_data => _library._get_rigid_body_user_dataPtr;
+  ffi.Pointer<
+          ffi
           .NativeFunction<ffi.Pointer<ffi.Float> Function(ffi.Pointer<wpBody>)>>
       get rigid_body_get_origin => _library._rigid_body_get_originPtr;
   ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<wpBody>)>>
       get destroy_rigid_body => _library._destroy_rigid_bodyPtr;
 }
+
+typedef Dart_PostCObject_Type = ffi.Pointer<
+    ffi.NativeFunction<
+        ffi.Bool Function(
+            Dart_Port_DL port_id, ffi.Pointer<Dart_CObject> message)>>;
+
+/// ============================================================================
+/// IMPORTANT! Never update these signatures without properly updating
+/// DART_API_DL_MAJOR_VERSION and DART_API_DL_MINOR_VERSION.
+///
+/// Verbatim copy of `dart_native_api.h` and `dart_api.h` symbol names and types
+/// to trigger compile-time errors if the symbols in those files are updated
+/// without updating these.
+///
+/// Function return and argument types, and typedefs are carbon copied. Structs
+/// are typechecked nominally in C/C++, so they are not copied, instead a
+/// comment is added to their definition.
+typedef Dart_Port_DL = ffi.Int64;
+
+/// This enum is versioned by DART_API_DL_MAJOR_VERSION, only add at the end
+/// and bump the DART_API_DL_MINOR_VERSION.
+typedef Dart_CObject = _Dart_CObject;
+
+/// This enum is versioned by DART_API_DL_MAJOR_VERSION, only add at the end
+/// and bump the DART_API_DL_MINOR_VERSION.
+final class _Dart_CObject extends ffi.Struct {
+  @ffi.Int32()
+  external int type;
+
+  external UnnamedUnion1 value;
+}
+
+/// A Dart_CObject is used for representing Dart objects as native C
+/// data outside the Dart heap. These objects are totally detached from
+/// the Dart heap. Only a subset of the Dart objects have a
+/// representation as a Dart_CObject.
+///
+/// The string encoding in the 'value.as_string' is UTF-8.
+///
+/// All the different types from dart:typed_data are exposed as type
+/// kTypedData. The specific type from dart:typed_data is in the type
+/// field of the as_typed_data structure. The length in the
+/// as_typed_data structure is always in bytes.
+///
+/// The data for kTypedData is copied on message send and ownership remains with
+/// the caller. The ownership of data for kExternalTyped is passed to the VM on
+/// message send and returned when the VM invokes the
+/// Dart_HandleFinalizer callback; a non-NULL callback must be provided.
+///
+/// Note that Dart_CObject_kNativePointer is intended for internal use by
+/// dart:io implementation and has no connection to dart:ffi Pointer class.
+/// It represents a pointer to a native resource of a known type.
+/// The receiving side will only see this pointer as an integer and will not
+/// see the specified finalizer.
+/// The specified finalizer will only be invoked if the message is not delivered.
+abstract class Dart_CObject_Type {
+  static const int Dart_CObject_kNull = 0;
+  static const int Dart_CObject_kBool = 1;
+  static const int Dart_CObject_kInt32 = 2;
+  static const int Dart_CObject_kInt64 = 3;
+  static const int Dart_CObject_kDouble = 4;
+  static const int Dart_CObject_kString = 5;
+  static const int Dart_CObject_kArray = 6;
+  static const int Dart_CObject_kTypedData = 7;
+  static const int Dart_CObject_kExternalTypedData = 8;
+  static const int Dart_CObject_kSendPort = 9;
+  static const int Dart_CObject_kCapability = 10;
+  static const int Dart_CObject_kNativePointer = 11;
+  static const int Dart_CObject_kUnsupported = 12;
+  static const int Dart_CObject_kUnmodifiableExternalTypedData = 13;
+  static const int Dart_CObject_kNumberOfTypes = 14;
+}
+
+final class UnnamedUnion1 extends ffi.Union {
+  @ffi.Bool()
+  external bool as_bool;
+
+  @ffi.Int32()
+  external int as_int32;
+
+  @ffi.Int64()
+  external int as_int64;
+
+  @ffi.Double()
+  external double as_double;
+
+  external ffi.Pointer<ffi.Char> as_string;
+
+  external UnnamedStruct1 as_send_port;
+
+  external UnnamedStruct2 as_capability;
+
+  external UnnamedStruct3 as_array;
+
+  external UnnamedStruct4 as_typed_data;
+
+  external UnnamedStruct5 as_external_typed_data;
+
+  external UnnamedStruct6 as_native_pointer;
+}
+
+final class UnnamedStruct1 extends ffi.Struct {
+  @Dart_Port()
+  external int id;
+
+  @Dart_Port()
+  external int origin_id;
+}
+
+/// A port is used to send or receive inter-isolate messages
+typedef Dart_Port = ffi.Int64;
+
+final class UnnamedStruct2 extends ffi.Struct {
+  @ffi.Int64()
+  external int id;
+}
+
+final class UnnamedStruct3 extends ffi.Struct {
+  @ffi.IntPtr()
+  external int length;
+
+  external ffi.Pointer<ffi.Pointer<_Dart_CObject>> values;
+}
+
+final class UnnamedStruct4 extends ffi.Struct {
+  @ffi.Int32()
+  external int type;
+
+  /// in elements, not bytes
+  @ffi.IntPtr()
+  external int length;
+
+  external ffi.Pointer<ffi.Uint8> values;
+}
+
+/// ==========
+/// Typed Data
+/// ==========
+abstract class Dart_TypedData_Type {
+  static const int Dart_TypedData_kByteData = 0;
+  static const int Dart_TypedData_kInt8 = 1;
+  static const int Dart_TypedData_kUint8 = 2;
+  static const int Dart_TypedData_kUint8Clamped = 3;
+  static const int Dart_TypedData_kInt16 = 4;
+  static const int Dart_TypedData_kUint16 = 5;
+  static const int Dart_TypedData_kInt32 = 6;
+  static const int Dart_TypedData_kUint32 = 7;
+  static const int Dart_TypedData_kInt64 = 8;
+  static const int Dart_TypedData_kUint64 = 9;
+  static const int Dart_TypedData_kFloat32 = 10;
+  static const int Dart_TypedData_kFloat64 = 11;
+  static const int Dart_TypedData_kInt32x4 = 12;
+  static const int Dart_TypedData_kFloat32x4 = 13;
+  static const int Dart_TypedData_kFloat64x2 = 14;
+  static const int Dart_TypedData_kInvalid = 15;
+}
+
+final class UnnamedStruct5 extends ffi.Struct {
+  @ffi.Int32()
+  external int type;
+
+  /// in elements, not bytes
+  @ffi.IntPtr()
+  external int length;
+
+  external ffi.Pointer<ffi.Uint8> data;
+
+  external ffi.Pointer<ffi.Void> peer;
+
+  external Dart_HandleFinalizer callback;
+}
+
+/// These structs are versioned by DART_API_DL_MAJOR_VERSION, bump the
+/// version when changing this struct.
+typedef Dart_HandleFinalizer = ffi.Pointer<
+    ffi.NativeFunction<
+        ffi.Void Function(ffi.Pointer<ffi.Void> isolate_callback_data,
+            ffi.Pointer<ffi.Void> peer)>>;
+
+final class UnnamedStruct6 extends ffi.Struct {
+  @ffi.IntPtr()
+  external int ptr;
+
+  @ffi.IntPtr()
+  external int size;
+
+  external Dart_HandleFinalizer callback;
+}
+
+typedef Dart_PostInteger_Type = ffi.Pointer<
+    ffi.NativeFunction<
+        ffi.Bool Function(Dart_Port_DL port_id, ffi.Int64 message)>>;
+typedef Dart_NewNativePort_Type = ffi.Pointer<
+    ffi.NativeFunction<
+        Dart_Port_DL Function(
+            ffi.Pointer<ffi.Char> name,
+            Dart_NativeMessageHandler_DL handler,
+            ffi.Bool handle_concurrently)>>;
+typedef Dart_NativeMessageHandler_DL = ffi.Pointer<
+    ffi.NativeFunction<
+        ffi.Void Function(
+            Dart_Port_DL dest_port_id, ffi.Pointer<Dart_CObject> message)>>;
+typedef Dart_CloseNativePort_Type = ffi.Pointer<
+    ffi.NativeFunction<ffi.Bool Function(Dart_Port_DL native_port_id)>>;
+typedef Dart_IsError_Type
+    = ffi.Pointer<ffi.NativeFunction<ffi.Bool Function(ffi.Handle handle)>>;
+typedef Dart_IsApiError_Type
+    = ffi.Pointer<ffi.NativeFunction<ffi.Bool Function(ffi.Handle handle)>>;
+typedef Dart_IsUnhandledExceptionError_Type
+    = ffi.Pointer<ffi.NativeFunction<ffi.Bool Function(ffi.Handle handle)>>;
+typedef Dart_IsCompilationError_Type
+    = ffi.Pointer<ffi.NativeFunction<ffi.Bool Function(ffi.Handle handle)>>;
+typedef Dart_IsFatalError_Type
+    = ffi.Pointer<ffi.NativeFunction<ffi.Bool Function(ffi.Handle handle)>>;
+typedef Dart_GetError_Type = ffi.Pointer<
+    ffi.NativeFunction<ffi.Pointer<ffi.Char> Function(ffi.Handle handle)>>;
+typedef Dart_ErrorHasException_Type
+    = ffi.Pointer<ffi.NativeFunction<ffi.Bool Function(ffi.Handle handle)>>;
+typedef Dart_ErrorGetException_Type
+    = ffi.Pointer<ffi.NativeFunction<ffi.Handle Function(ffi.Handle handle)>>;
+typedef Dart_ErrorGetStackTrace_Type
+    = ffi.Pointer<ffi.NativeFunction<ffi.Handle Function(ffi.Handle handle)>>;
+typedef Dart_NewApiError_Type = ffi.Pointer<
+    ffi.NativeFunction<ffi.Handle Function(ffi.Pointer<ffi.Char> error)>>;
+typedef Dart_NewCompilationError_Type = ffi.Pointer<
+    ffi.NativeFunction<ffi.Handle Function(ffi.Pointer<ffi.Char> error)>>;
+typedef Dart_NewUnhandledExceptionError_Type = ffi
+    .Pointer<ffi.NativeFunction<ffi.Handle Function(ffi.Handle exception)>>;
+typedef Dart_PropagateError_Type
+    = ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Handle handle)>>;
+typedef Dart_HandleFromPersistent_Type
+    = ffi.Pointer<ffi.NativeFunction<ffi.Handle Function(ffi.Handle object)>>;
+typedef Dart_HandleFromWeakPersistent_Type = ffi.Pointer<
+    ffi.NativeFunction<ffi.Handle Function(Dart_WeakPersistentHandle object)>>;
+typedef Dart_WeakPersistentHandle = ffi.Pointer<_Dart_WeakPersistentHandle>;
+
+final class _Dart_WeakPersistentHandle extends ffi.Opaque {}
+
+typedef Dart_NewPersistentHandle_Type
+    = ffi.Pointer<ffi.NativeFunction<ffi.Handle Function(ffi.Handle object)>>;
+typedef Dart_SetPersistentHandle_Type = ffi.Pointer<
+    ffi.NativeFunction<ffi.Void Function(ffi.Handle obj1, ffi.Handle obj2)>>;
+typedef Dart_DeletePersistentHandle_Type
+    = ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Handle object)>>;
+typedef Dart_NewWeakPersistentHandle_Type = ffi.Pointer<
+    ffi.NativeFunction<
+        Dart_WeakPersistentHandle Function(
+            ffi.Handle object,
+            ffi.Pointer<ffi.Void> peer,
+            ffi.IntPtr external_allocation_size,
+            Dart_HandleFinalizer callback)>>;
+typedef Dart_DeleteWeakPersistentHandle_Type = ffi.Pointer<
+    ffi.NativeFunction<ffi.Void Function(Dart_WeakPersistentHandle object)>>;
+typedef Dart_NewFinalizableHandle_Type = ffi.Pointer<
+    ffi.NativeFunction<
+        Dart_FinalizableHandle Function(
+            ffi.Handle object,
+            ffi.Pointer<ffi.Void> peer,
+            ffi.IntPtr external_allocation_size,
+            Dart_HandleFinalizer callback)>>;
+typedef Dart_FinalizableHandle = ffi.Pointer<_Dart_FinalizableHandle>;
+
+final class _Dart_FinalizableHandle extends ffi.Opaque {}
+
+typedef Dart_DeleteFinalizableHandle_Type = ffi.Pointer<
+    ffi.NativeFunction<
+        ffi.Void Function(
+            Dart_FinalizableHandle object, ffi.Handle strong_ref_to_object)>>;
+typedef Dart_CurrentIsolate_Type
+    = ffi.Pointer<ffi.NativeFunction<Dart_Isolate Function()>>;
+
+/// An isolate is the unit of concurrency in Dart. Each isolate has
+/// its own memory and thread of control. No state is shared between
+/// isolates. Instead, isolates communicate by message passing.
+///
+/// Each thread keeps track of its current isolate, which is the
+/// isolate which is ready to execute on the current thread. The
+/// current isolate may be NULL, in which case no isolate is ready to
+/// execute. Most of the Dart apis require there to be a current
+/// isolate in order to function without error. The current isolate is
+/// set by any call to Dart_CreateIsolateGroup or Dart_EnterIsolate.
+typedef Dart_Isolate = ffi.Pointer<_Dart_Isolate>;
+
+final class _Dart_Isolate extends ffi.Opaque {}
+
+typedef Dart_ExitIsolate_Type
+    = ffi.Pointer<ffi.NativeFunction<ffi.Void Function()>>;
+typedef Dart_EnterIsolate_Type
+    = ffi.Pointer<ffi.NativeFunction<ffi.Void Function(Dart_Isolate)>>;
+typedef Dart_Post_Type = ffi.Pointer<
+    ffi.NativeFunction<
+        ffi.Bool Function(Dart_Port_DL port_id, ffi.Handle object)>>;
+typedef Dart_NewSendPort_Type = ffi
+    .Pointer<ffi.NativeFunction<ffi.Handle Function(Dart_Port_DL port_id)>>;
+typedef Dart_SendPortGetId_Type = ffi.Pointer<
+    ffi.NativeFunction<
+        ffi.Handle Function(
+            ffi.Handle port, ffi.Pointer<Dart_Port_DL> port_id)>>;
+typedef Dart_EnterScope_Type
+    = ffi.Pointer<ffi.NativeFunction<ffi.Void Function()>>;
+typedef Dart_ExitScope_Type
+    = ffi.Pointer<ffi.NativeFunction<ffi.Void Function()>>;
+typedef Dart_IsNull_Type
+    = ffi.Pointer<ffi.NativeFunction<ffi.Bool Function(ffi.Handle)>>;
+typedef Dart_UpdateExternalSize_Type = ffi.Pointer<
+    ffi.NativeFunction<
+        ffi.Void Function(Dart_WeakPersistentHandle object,
+            ffi.IntPtr external_allocation_size)>>;
+typedef Dart_UpdateFinalizableExternalSize_Type = ffi.Pointer<
+    ffi.NativeFunction<
+        ffi.Void Function(
+            Dart_FinalizableHandle object,
+            ffi.Handle strong_ref_to_object,
+            ffi.IntPtr external_allocation_size)>>;
 
 final class wpWorld extends ffi.Opaque {}
 

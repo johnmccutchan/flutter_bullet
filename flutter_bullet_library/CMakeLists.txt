@@ -12,7 +12,7 @@ add_subdirectory(bullet3/src/BulletDynamics EXCLUDE_FROM_ALL)
 add_subdirectory(bullet3/src/BulletSoftBody EXCLUDE_FROM_ALL)
 
 
-add_library(flutter_bullet_library SHARED flutter_bullet.cc flutter_bullet.def)
+add_library(flutter_bullet_library SHARED flutter_bullet.cc dart_api_dl.c)
 target_link_libraries(flutter_bullet_library PUBLIC m)
 target_link_libraries(flutter_bullet_library PUBLIC LinearMath)
 target_link_libraries(flutter_bullet_library PUBLIC Bullet3Common)

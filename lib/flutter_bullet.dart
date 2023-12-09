@@ -1,10 +1,3 @@
-// You have generated a new plugin project without specifying the `--platforms`
-// flag. An FFI plugin project that supports no platforms is generated.
-// To add platforms, run `flutter create -t plugin_ffi --platforms <platforms> .`
-// in this directory. You can also find a detailed instruction on how to
-// add platforms in the `pubspec.yaml` at
-// https://flutter.dev/docs/development/packages-and-plugins/developing-packages#plugin-platforms.
-
 import 'dart:ffi' as ffi;
 import 'dart:io';
 
@@ -16,8 +9,7 @@ const String _libName = 'flutter_bullet';
 /// The dynamic library in which the symbols for [FlutterBulletBindings] can be found.
 final ffi.DynamicLibrary _dylib = () {
   if (Platform.isMacOS || Platform.isIOS) {
-    return ffi.DynamicLibrary.open(
-        '/Users/johnmccutchan/workspace/flutter_bullet/flutter_bullet_library/lib$_libName.dylib');
+    return ffi.DynamicLibrary.open('flutter_bullet_library/lib$_libName.dylib');
   }
   if (Platform.isAndroid || Platform.isLinux) {
     return ffi.DynamicLibrary.open('lib$_libName.so');
@@ -28,8 +20,17 @@ final ffi.DynamicLibrary _dylib = () {
   throw UnsupportedError('Unknown platform: ${Platform.operatingSystem}');
 }();
 
+FlutterBulletBindings _initBindings() {
+  FlutterBulletBindings bindings = FlutterBulletBindings(_dylib);
+  int r = bindings.Dart_InitializeApiDL(ffi.NativeApi.initializeApiDLData);
+  if (r != 0) {
+    throw new UnsupportedError('Dart_InitializeApiDL returned $r');
+  }
+  return bindings;
+}
+
 /// The bindings to the native functions in [_dylib].
-final FlutterBulletBindings _bindings = FlutterBulletBindings(_dylib);
+final FlutterBulletBindings _bindings = _initBindings();
 
 /// Physics world that can be populated with rigid bodies.
 class World implements ffi.Finalizable {
@@ -127,6 +128,11 @@ class RigidBody implements ffi.Finalizable {
     final nativeBody = _bindings.create_rigid_body(
         mass, shape._nativeShape, origin.x, origin.y, origin.z);
     final body = RigidBody._(nativeBody, shape);
+    final weakBody = new WeakReference(body);
+    _bindings.set_rigid_body_user_data(nativeBody, weakBody);
+    WeakReference<RigidBody> retrievedWeakBody = _bindings
+        .get_rigid_body_user_data(nativeBody) as WeakReference<RigidBody>;
+    print(identical(weakBody.target, retrievedWeakBody.target));
     _finalizer.attach(body, nativeBody.cast(), detach: body);
     return body;
   }

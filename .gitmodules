@@ -1,3 +1,4 @@
 [submodule "flutter_bullet_library/bullet3"]
 	path = flutter_bullet_library/bullet3
 	url = https://github.com/bulletphysics/bullet3.git
+  ignore = untracked
