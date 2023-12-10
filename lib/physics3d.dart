@@ -1,41 +1,12 @@
 import 'dart:ffi' as ffi;
-import 'dart:io';
 
-import 'src/flutter_bullet_bindings_generated.dart';
+import 'src/flutter_bullet_bindings.dart';
 import 'package:vector_math/vector_math.dart';
-
-const String _libName = 'flutter_bullet';
-
-/// The dynamic library in which the symbols for [FlutterBulletBindings] can be found.
-final ffi.DynamicLibrary _dylib = () {
-  if (Platform.isMacOS || Platform.isIOS) {
-    return ffi.DynamicLibrary.open('native/lib$_libName.dylib');
-  }
-  if (Platform.isAndroid || Platform.isLinux) {
-    return ffi.DynamicLibrary.open('lib$_libName.so');
-  }
-  if (Platform.isWindows) {
-    return ffi.DynamicLibrary.open('$_libName.dll');
-  }
-  throw UnsupportedError('Unknown platform: ${Platform.operatingSystem}');
-}();
-
-FlutterBulletBindings _initBindings() {
-  FlutterBulletBindings bindings = FlutterBulletBindings(_dylib);
-  int r = bindings.Dart_InitializeApiDL(ffi.NativeApi.initializeApiDLData);
-  if (r != 0) {
-    throw new UnsupportedError('Dart_InitializeApiDL returned $r');
-  }
-  return bindings;
-}
-
-/// The bindings to the native functions in [_dylib].
-final FlutterBulletBindings _bindings = _initBindings();
 
 /// Physics world that can be populated with rigid bodies.
 class World implements ffi.Finalizable {
   static final _finalizer =
-      ffi.NativeFinalizer(_bindings.addresses.destroy_world.cast());
+      ffi.NativeFinalizer(bindings.addresses.destroy_world.cast());
 
   ffi.Pointer<wpWorld> _nativeWorld;
 
@@ -44,7 +15,7 @@ class World implements ffi.Finalizable {
   World._(this._nativeWorld);
 
   factory World() {
-    final nativeWorld = _bindings.create_world();
+    final nativeWorld = bindings.create_world();
     final world = World._(nativeWorld);
     _finalizer.attach(world, nativeWorld.cast(), detach: world);
     return world;
@@ -52,7 +23,7 @@ class World implements ffi.Finalizable {
 
   // Step the simulation forward by dt.
   void step(double dt) {
-    _bindings.step_world(_nativeWorld, dt);
+    bindings.step_world(_nativeWorld, dt);
   }
 
   void addBody(RigidBody body) {
@@ -60,7 +31,7 @@ class World implements ffi.Finalizable {
       // Already added.
       return;
     }
-    _bindings.world_add_rigid_body(_nativeWorld, body._nativeBody);
+    bindings.world_add_rigid_body(_nativeWorld, body._nativeBody);
   }
 
   void removeBody(RigidBody body) {
@@ -68,14 +39,14 @@ class World implements ffi.Finalizable {
       // Never added.
       return;
     }
-    _bindings.world_remove_rigid_body(_nativeWorld, body._nativeBody);
+    bindings.world_remove_rigid_body(_nativeWorld, body._nativeBody);
   }
 }
 
 // Collision shape
 class CollisionShape implements ffi.Finalizable {
   static final _finalizer =
-      ffi.NativeFinalizer(_bindings.addresses.destroy_shape.cast());
+      ffi.NativeFinalizer(bindings.addresses.destroy_shape.cast());
 
   ffi.Pointer<wpShape> _nativeShape;
 
@@ -99,7 +70,7 @@ class BoxShape extends ConvexShape {
 
   factory BoxShape(Vector3 halfExtents) {
     final nativeShape =
-        _bindings.create_box_shape(halfExtents.x, halfExtents.y, halfExtents.z);
+        bindings.create_box_shape(halfExtents.x, halfExtents.y, halfExtents.z);
     return BoxShape._(nativeShape);
   }
 }
@@ -108,7 +79,7 @@ class StaticPlaneShape extends ConcaveShape {
   StaticPlaneShape._(ffi.Pointer<wpShape> nativeShape) : super._(nativeShape);
 
   factory StaticPlaneShape(Vector3 planeNormal, double planeConstant) {
-    final nativeShape = _bindings.create_static_plane_shape(
+    final nativeShape = bindings.create_static_plane_shape(
         planeNormal.x, planeNormal.y, planeNormal.z, planeConstant);
     return StaticPlaneShape._(nativeShape);
   }
@@ -117,7 +88,7 @@ class StaticPlaneShape extends ConcaveShape {
 // Rigid body.
 class RigidBody implements ffi.Finalizable {
   static final _finalizer =
-      ffi.NativeFinalizer(_bindings.addresses.destroy_rigid_body.cast());
+      ffi.NativeFinalizer(bindings.addresses.destroy_rigid_body.cast());
 
   ffi.Pointer<wpBody> _nativeBody;
   CollisionShape _shape;
@@ -125,12 +96,12 @@ class RigidBody implements ffi.Finalizable {
   RigidBody._(this._nativeBody, this._shape);
 
   factory RigidBody(double mass, CollisionShape shape, Vector3 origin) {
-    final nativeBody = _bindings.create_rigid_body(
+    final nativeBody = bindings.create_rigid_body(
         mass, shape._nativeShape, origin.x, origin.y, origin.z);
     final body = RigidBody._(nativeBody, shape);
     final weakBody = new WeakReference(body);
-    _bindings.set_rigid_body_user_data(nativeBody, weakBody);
-    WeakReference<RigidBody> retrievedWeakBody = _bindings
+    bindings.set_rigid_body_user_data(nativeBody, weakBody);
+    WeakReference<RigidBody> retrievedWeakBody = bindings
         .get_rigid_body_user_data(nativeBody) as WeakReference<RigidBody>;
     print(identical(weakBody.target, retrievedWeakBody.target));
     _finalizer.attach(body, nativeBody.cast(), detach: body);
@@ -140,7 +111,7 @@ class RigidBody implements ffi.Finalizable {
   CollisionShape get shape => _shape;
 
   Vector3 get origin {
-    final array = _bindings.rigid_body_get_origin(_nativeBody).asTypedList(3);
+    final array = bindings.rigid_body_get_origin(_nativeBody).asTypedList(3);
     return new Vector3(array[0], array[1], array[2]);
   }
 }

@@ -1,4 +1,4 @@
-import 'package:flutter_bullet/flutter_bullet.dart';
+import 'package:flutter_bullet/physics3d.dart';
 import 'package:vector_math/vector_math.dart';
 
 main() {
