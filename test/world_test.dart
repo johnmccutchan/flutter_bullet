@@ -5,23 +5,28 @@ main() {
   // Create a physics world. Gravity is -Y.
   var world = World();
 
-  // Create a unit box
-  var box = BoxShape(Vector3(.5, .5, .5));
-
   // Create a static plane in the X-Z axis.
   var plane = StaticPlaneShape(Vector3(0, 1, 0), 0);
 
-  // Make a dynamic body with mass 1.0 with the box shape.
-  // Place it 10 units in the air.
-  var dynamicBody = RigidBody(1.0, box);
-  dynamicBody.xform = Transform()..origin = Vector3(0, 10, 0);
-
-  // Make a static collidable.
+  // Make a static collidable that represents the floor.
   var floor = Collidable();
   floor.shape = plane;
 
-  world.addBody(dynamicBody);
   world.addCollidable(floor);
+
+  // Create a unit box
+  var box = BoxShape(Vector3(.5, .5, .5));
+
+  var bodies = <RigidBody>[];
+
+  // Create a vertical tower of 4 bodies.
+  for (int i = 0; i < 4; i++) {
+    // Make a dynamic body with mass 1.0 with the box shape.
+    var body = new RigidBody(1.0, box);
+    body.xform = Transform()..origin = Vector3(0, 6 - i * 1.1, 0);
+    world.addBody(body);
+    bodies.add(body);
+  }
 
   // 1/60.
   final dt = 0.0625;
@@ -29,11 +34,17 @@ main() {
   // 200 steps.
   for (int i = 0; i < 200; i++) {
     world.step(dt);
-    var origin = dynamicBody.xform.origin;
-    var rotation = dynamicBody.xform.rotation;
-    print(origin);
+    for (int b = 0; b < bodies.length; b++) {
+      var body = bodies[b];
+      print('[$b] - ${body.xform.origin}');
+    }
   }
 
-  world.removeBody(dynamicBody);
+  // Clear world.
+  for (final b in bodies) {
+    world.removeBody(b);
+  }
   world.removeCollidable(floor);
+
+  world.step(dt);
 }
