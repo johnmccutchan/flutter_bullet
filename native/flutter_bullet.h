@@ -42,6 +42,11 @@ FFI_PLUGIN_EXPORT void world_add_collidable(wpWorld* world, wpCollidable* collid
 
 FFI_PLUGIN_EXPORT void world_remove_collidable(wpWorld* world, wpCollidable* collidable);
 
+FFI_PLUGIN_EXPORT void world_raycast(wpWorld* world,
+                                     float sx, float sy, float sz, 
+                                     float ex, float ey, float ez,
+                                     float (*cb)(Dart_Handle collidable, float fraction, const float* n));
+
 FFI_PLUGIN_EXPORT void destroy_world(wpWorld* world);
 
 // Collidables
@@ -49,7 +54,7 @@ FFI_PLUGIN_EXPORT wpCollidable* create_collidable();
 
 FFI_PLUGIN_EXPORT void collidable_set_dart_owner(wpCollidable* collidable, Dart_Handle owner);
 
-FFI_PLUGIN_EXPORT Dart_Handle collidable_get_dart_owner(wpCollidable* collidable);
+FFI_PLUGIN_EXPORT Dart_Handle collidable_get_dart_owner(const wpCollidable* collidable);
 
 FFI_PLUGIN_EXPORT void collidable_set_shape(wpCollidable* collidable, wpShape* shape);
 

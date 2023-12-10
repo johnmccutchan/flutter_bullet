@@ -28,6 +28,18 @@ main() {
     bodies.add(body);
   }
 
+  int bodyHitCount = 0;
+  rayCast(world, Vector3(0, 0, 0), Vector3(0, 6, 0), (hit) {
+    print(hit);
+    if (hit.object is RigidBody) {
+      bodyHitCount++;
+    }
+    return 1.0;
+  });
+  if (bodyHitCount != bodies.length) {
+    throw new Exception("wrong number of bodies hit.");
+  }
+
   // 1/60.
   final dt = 0.0625;
 

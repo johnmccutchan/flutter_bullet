@@ -9,3 +9,4 @@ part 'src/rigid_body.dart';
 part 'src/shapes.dart';
 part 'src/transform.dart';
 part 'src/world.dart';
+part 'src/query.dart';

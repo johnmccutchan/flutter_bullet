@@ -500,6 +500,62 @@ class FlutterBulletBindings {
   late final _world_remove_collidable = _world_remove_collidablePtr.asFunction<
       void Function(ffi.Pointer<wpWorld>, ffi.Pointer<wpCollidable>)>();
 
+  void world_raycast(
+    ffi.Pointer<wpWorld> world,
+    double sx,
+    double sy,
+    double sz,
+    double ex,
+    double ey,
+    double ez,
+    ffi.Pointer<
+            ffi.NativeFunction<
+                ffi.Float Function(ffi.Handle collidable, ffi.Float fraction,
+                    ffi.Pointer<ffi.Float> n)>>
+        cb,
+  ) {
+    return _world_raycast(
+      world,
+      sx,
+      sy,
+      sz,
+      ex,
+      ey,
+      ez,
+      cb,
+    );
+  }
+
+  late final _world_raycastPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Void Function(
+              ffi.Pointer<wpWorld>,
+              ffi.Float,
+              ffi.Float,
+              ffi.Float,
+              ffi.Float,
+              ffi.Float,
+              ffi.Float,
+              ffi.Pointer<
+                  ffi.NativeFunction<
+                      ffi.Float Function(
+                          ffi.Handle collidable,
+                          ffi.Float fraction,
+                          ffi.Pointer<ffi.Float> n)>>)>>('world_raycast');
+  late final _world_raycast = _world_raycastPtr.asFunction<
+      void Function(
+          ffi.Pointer<wpWorld>,
+          double,
+          double,
+          double,
+          double,
+          double,
+          double,
+          ffi.Pointer<
+              ffi.NativeFunction<
+                  ffi.Float Function(ffi.Handle collidable, ffi.Float fraction,
+                      ffi.Pointer<ffi.Float> n)>>)>();
+
   void destroy_world(
     ffi.Pointer<wpWorld> world,
   ) {
@@ -839,6 +895,23 @@ class _SymbolAddresses {
               ffi.Void Function(
                   ffi.Pointer<wpWorld>, ffi.Pointer<wpCollidable>)>>
       get world_remove_collidable => _library._world_remove_collidablePtr;
+  ffi.Pointer<
+      ffi.NativeFunction<
+          ffi.Void Function(
+              ffi.Pointer<wpWorld>,
+              ffi.Float,
+              ffi.Float,
+              ffi.Float,
+              ffi.Float,
+              ffi.Float,
+              ffi.Float,
+              ffi.Pointer<
+                  ffi.NativeFunction<
+                      ffi.Float Function(
+                          ffi.Handle collidable,
+                          ffi.Float fraction,
+                          ffi.Pointer<ffi.Float> n)>>)>> get world_raycast =>
+      _library._world_raycastPtr;
   ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<wpWorld>)>>
       get destroy_world => _library._destroy_worldPtr;
   ffi.Pointer<ffi.NativeFunction<ffi.Pointer<wpCollidable> Function()>>

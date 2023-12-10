@@ -66,4 +66,22 @@ class World implements ffi.Finalizable {
     bindings.world_remove_collidable(
         _nativeWorld, collidable._nativeCollidable);
   }
+
+  void _rayCast(Vector3 start, Vector3 end, OnRayHit onRayHit) {
+    double closure(
+        Object collidable, double fraction, ffi.Pointer<ffi.Float> normal) {
+      assert(collidable is Collidable);
+      RayHit hit = RayHit(collidable as Collidable,
+          Vector3.fromFloat32List(normal.asTypedList(3)), fraction, start, end);
+      return onRayHit(hit);
+    }
+
+    final callback = ffi.NativeCallable<
+            ffi.Float Function(
+                ffi.Handle, ffi.Float, ffi.Pointer<ffi.Float>)>.isolateLocal(
+        closure,
+        exceptionalReturn: 0.0);
+    bindings.world_raycast(_nativeWorld, start.x, start.y, start.z, end.x,
+        end.y, end.z, callback.nativeFunction);
+  }
 }
