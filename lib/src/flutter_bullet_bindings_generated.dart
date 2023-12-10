@@ -538,26 +538,19 @@ class FlutterBulletBindings {
   ffi.Pointer<wpBody> create_rigid_body(
     double mass,
     ffi.Pointer<wpShape> shape,
-    double tx,
-    double ty,
-    double tz,
   ) {
     return _create_rigid_body(
       mass,
       shape,
-      tx,
-      ty,
-      tz,
     );
   }
 
   late final _create_rigid_bodyPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Pointer<wpBody> Function(ffi.Float, ffi.Pointer<wpShape>,
-              ffi.Float, ffi.Float, ffi.Float)>>('create_rigid_body');
-  late final _create_rigid_body = _create_rigid_bodyPtr.asFunction<
-      ffi.Pointer<wpBody> Function(
-          double, ffi.Pointer<wpShape>, double, double, double)>();
+          ffi.Pointer<wpBody> Function(
+              ffi.Float, ffi.Pointer<wpShape>)>>('create_rigid_body');
+  late final _create_rigid_body = _create_rigid_bodyPtr
+      .asFunction<ffi.Pointer<wpBody> Function(double, ffi.Pointer<wpShape>)>();
 
   void set_rigid_body_user_data(
     ffi.Pointer<wpBody> body,
@@ -590,20 +583,37 @@ class FlutterBulletBindings {
   late final _get_rigid_body_user_data = _get_rigid_body_user_dataPtr
       .asFunction<Object Function(ffi.Pointer<wpBody>)>();
 
-  ffi.Pointer<ffi.Float> rigid_body_get_origin(
+  ffi.Pointer<ffi.Float> rigid_body_get_raw_transform(
     ffi.Pointer<wpBody> body,
   ) {
-    return _rigid_body_get_origin(
+    return _rigid_body_get_raw_transform(
       body,
     );
   }
 
-  late final _rigid_body_get_originPtr = _lookup<
+  late final _rigid_body_get_raw_transformPtr = _lookup<
       ffi.NativeFunction<
           ffi.Pointer<ffi.Float> Function(
-              ffi.Pointer<wpBody>)>>('rigid_body_get_origin');
-  late final _rigid_body_get_origin = _rigid_body_get_originPtr
+              ffi.Pointer<wpBody>)>>('rigid_body_get_raw_transform');
+  late final _rigid_body_get_raw_transform = _rigid_body_get_raw_transformPtr
       .asFunction<ffi.Pointer<ffi.Float> Function(ffi.Pointer<wpBody>)>();
+
+  void rigid_body_set_raw_transform(
+    ffi.Pointer<wpBody> body,
+    ffi.Pointer<ffi.Float> xform,
+  ) {
+    return _rigid_body_set_raw_transform(
+      body,
+      xform,
+    );
+  }
+
+  late final _rigid_body_set_raw_transformPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Void Function(ffi.Pointer<wpBody>,
+              ffi.Pointer<ffi.Float>)>>('rigid_body_set_raw_transform');
+  late final _rigid_body_set_raw_transform = _rigid_body_set_raw_transformPtr
+      .asFunction<void Function(ffi.Pointer<wpBody>, ffi.Pointer<ffi.Float>)>();
 
   void destroy_rigid_body(
     ffi.Pointer<wpBody> body,
@@ -737,14 +747,9 @@ class _SymbolAddresses {
   ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<wpShape>)>>
       get destroy_shape => _library._destroy_shapePtr;
   ffi.Pointer<
-      ffi.NativeFunction<
-          ffi.Pointer<wpBody> Function(
-              ffi.Float,
-              ffi.Pointer<wpShape>,
-              ffi.Float,
-              ffi.Float,
-              ffi.Float)>> get create_rigid_body =>
-      _library._create_rigid_bodyPtr;
+          ffi.NativeFunction<
+              ffi.Pointer<wpBody> Function(ffi.Float, ffi.Pointer<wpShape>)>>
+      get create_rigid_body => _library._create_rigid_bodyPtr;
   ffi.Pointer<
           ffi
           .NativeFunction<ffi.Void Function(ffi.Pointer<wpBody>, ffi.Handle)>>
@@ -754,7 +759,13 @@ class _SymbolAddresses {
   ffi.Pointer<
           ffi
           .NativeFunction<ffi.Pointer<ffi.Float> Function(ffi.Pointer<wpBody>)>>
-      get rigid_body_get_origin => _library._rigid_body_get_originPtr;
+      get rigid_body_get_raw_transform =>
+          _library._rigid_body_get_raw_transformPtr;
+  ffi.Pointer<
+          ffi.NativeFunction<
+              ffi.Void Function(ffi.Pointer<wpBody>, ffi.Pointer<ffi.Float>)>>
+      get rigid_body_set_raw_transform =>
+          _library._rigid_body_set_raw_transformPtr;
   ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<wpBody>)>>
       get destroy_rigid_body => _library._destroy_rigid_bodyPtr;
 }

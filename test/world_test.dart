@@ -13,11 +13,12 @@ main() {
 
   // Make a dynamic body with mass 1.0 with the box shape.
   // Place it 10 units in the air.
-  var dynamicBody = RigidBody(1.0, box, Vector3(0, 10, 0));
+  var dynamicBody = RigidBody(1.0, box);
+  dynamicBody.xform = Transform()..origin = Vector3(0, 10, 0);
 
   // Make a static body (mass == 0.0) with the static plane shape
   // place it at the origin.
-  var floorBody = RigidBody(0.0, plane, Vector3(0, 0, 0));
+  var floorBody = RigidBody(0.0, plane);
 
   world.addBody(dynamicBody);
   world.addBody(floorBody);
@@ -28,7 +29,9 @@ main() {
   // 200 steps.
   for (int i = 0; i < 200; i++) {
     world.step(dt);
-    var origin = dynamicBody.origin;
+    var origin = dynamicBody.xform.origin;
+    var rotation = dynamicBody.xform.rotation;
     print(origin);
+    print(rotation);
   }
 }

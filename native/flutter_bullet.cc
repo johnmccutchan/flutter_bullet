@@ -4,6 +4,7 @@
 
 // Linear math
 #include "bullet3/src/BulletCollision/CollisionShapes/btStaticPlaneShape.h"
+#include "bullet3/src/LinearMath/btMatrix3x3.h"
 #include "bullet3/src/LinearMath/btVector3.h"
 #include "bullet3/src/LinearMath/btQuaternion.h"
 #include "bullet3/src/LinearMath/btTransform.h"
@@ -101,14 +102,10 @@ FFI_PLUGIN_EXPORT void destroy_shape(wpShape* shape) {
   delete _shape;
 }
 
-FFI_PLUGIN_EXPORT wpBody* create_rigid_body(float mass, wpShape* shape, float tx, float ty, float tz) {
+FFI_PLUGIN_EXPORT wpBody* create_rigid_body(float mass, wpShape* shape) {
   btCollisionShape* _shape = reinterpret_cast<btCollisionShape*>(shape);
-  // TODO(johnmccutchan): Provide an equivalent of btTransform in vector_math library.
-  // TODO(johnmccutchan): Think about an optimal way to pass transforms back and forth between native code,
-  // probably want to pass most things as float arrays.
   btTransform t;
   t.setIdentity();
-  t.setOrigin(btVector3(tx, ty, tz));
 
   bool isDynamic = (mass != 0.0f);
 
@@ -147,6 +144,21 @@ FFI_PLUGIN_EXPORT Dart_Handle get_rigid_body_user_data(wpBody* body) {
 FFI_PLUGIN_EXPORT const float* rigid_body_get_origin(wpBody* body) {
   btRigidBody* _body = reinterpret_cast<btRigidBody*>(body);
   return static_cast<const btScalar*>(_body->getCenterOfMassPosition());
+}
+
+FFI_PLUGIN_EXPORT const float* rigid_body_get_raw_transform(wpBody* body) {
+  btRigidBody* _body = reinterpret_cast<btRigidBody*>(body);
+  const btTransform& xform = _body->getCenterOfMassTransform();
+  const btMatrix3x3& rotation = xform.getBasis();
+  const btVector3& start = rotation.getRow(0);
+  return static_cast<const btScalar*>(start);
+}
+
+FFI_PLUGIN_EXPORT void rigid_body_set_raw_transform(wpBody* body, const float* m) {
+  btRigidBody* _body = reinterpret_cast<btRigidBody*>(body);
+  btTransform tform;
+  tform.setFromOpenGLMatrix(m);
+  _body->setCenterOfMassTransform(tform);
 }
 
 FFI_PLUGIN_EXPORT void destroy_rigid_body(wpBody* body) {
