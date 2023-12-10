@@ -466,6 +466,40 @@ class FlutterBulletBindings {
   late final _world_remove_rigid_body = _world_remove_rigid_bodyPtr
       .asFunction<void Function(ffi.Pointer<wpWorld>, ffi.Pointer<wpBody>)>();
 
+  void world_add_collidable(
+    ffi.Pointer<wpWorld> world,
+    ffi.Pointer<wpCollidable> collidable,
+  ) {
+    return _world_add_collidable(
+      world,
+      collidable,
+    );
+  }
+
+  late final _world_add_collidablePtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Void Function(ffi.Pointer<wpWorld>,
+              ffi.Pointer<wpCollidable>)>>('world_add_collidable');
+  late final _world_add_collidable = _world_add_collidablePtr.asFunction<
+      void Function(ffi.Pointer<wpWorld>, ffi.Pointer<wpCollidable>)>();
+
+  void world_remove_collidable(
+    ffi.Pointer<wpWorld> world,
+    ffi.Pointer<wpCollidable> collidable,
+  ) {
+    return _world_remove_collidable(
+      world,
+      collidable,
+    );
+  }
+
+  late final _world_remove_collidablePtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Void Function(ffi.Pointer<wpWorld>,
+              ffi.Pointer<wpCollidable>)>>('world_remove_collidable');
+  late final _world_remove_collidable = _world_remove_collidablePtr.asFunction<
+      void Function(ffi.Pointer<wpWorld>, ffi.Pointer<wpCollidable>)>();
+
   void destroy_world(
     ffi.Pointer<wpWorld> world,
   ) {
@@ -480,6 +514,131 @@ class FlutterBulletBindings {
   late final _destroy_world =
       _destroy_worldPtr.asFunction<void Function(ffi.Pointer<wpWorld>)>();
 
+  /// Collidables
+  ffi.Pointer<wpCollidable> create_collidable() {
+    return _create_collidable();
+  }
+
+  late final _create_collidablePtr =
+      _lookup<ffi.NativeFunction<ffi.Pointer<wpCollidable> Function()>>(
+          'create_collidable');
+  late final _create_collidable =
+      _create_collidablePtr.asFunction<ffi.Pointer<wpCollidable> Function()>();
+
+  void collidable_set_dart_owner(
+    ffi.Pointer<wpCollidable> collidable,
+    Object owner,
+  ) {
+    return _collidable_set_dart_owner(
+      collidable,
+      owner,
+    );
+  }
+
+  late final _collidable_set_dart_ownerPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Void Function(ffi.Pointer<wpCollidable>,
+              ffi.Handle)>>('collidable_set_dart_owner');
+  late final _collidable_set_dart_owner = _collidable_set_dart_ownerPtr
+      .asFunction<void Function(ffi.Pointer<wpCollidable>, Object)>();
+
+  Object collidable_get_dart_owner(
+    ffi.Pointer<wpCollidable> collidable,
+  ) {
+    return _collidable_get_dart_owner(
+      collidable,
+    );
+  }
+
+  late final _collidable_get_dart_ownerPtr = _lookup<
+          ffi.NativeFunction<ffi.Handle Function(ffi.Pointer<wpCollidable>)>>(
+      'collidable_get_dart_owner');
+  late final _collidable_get_dart_owner = _collidable_get_dart_ownerPtr
+      .asFunction<Object Function(ffi.Pointer<wpCollidable>)>();
+
+  void collidable_set_shape(
+    ffi.Pointer<wpCollidable> collidable,
+    ffi.Pointer<wpShape> shape,
+  ) {
+    return _collidable_set_shape(
+      collidable,
+      shape,
+    );
+  }
+
+  late final _collidable_set_shapePtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Void Function(ffi.Pointer<wpCollidable>,
+              ffi.Pointer<wpShape>)>>('collidable_set_shape');
+  late final _collidable_set_shape = _collidable_set_shapePtr.asFunction<
+      void Function(ffi.Pointer<wpCollidable>, ffi.Pointer<wpShape>)>();
+
+  ffi.Pointer<ffi.Float> collidable_get_raw_transform(
+    ffi.Pointer<wpCollidable> collidable,
+  ) {
+    return _collidable_get_raw_transform(
+      collidable,
+    );
+  }
+
+  late final _collidable_get_raw_transformPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Pointer<ffi.Float> Function(
+              ffi.Pointer<wpCollidable>)>>('collidable_get_raw_transform');
+  late final _collidable_get_raw_transform = _collidable_get_raw_transformPtr
+      .asFunction<ffi.Pointer<ffi.Float> Function(ffi.Pointer<wpCollidable>)>();
+
+  void collidable_set_raw_transform(
+    ffi.Pointer<wpCollidable> collidable,
+    ffi.Pointer<ffi.Float> m,
+  ) {
+    return _collidable_set_raw_transform(
+      collidable,
+      m,
+    );
+  }
+
+  late final _collidable_set_raw_transformPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Void Function(ffi.Pointer<wpCollidable>,
+              ffi.Pointer<ffi.Float>)>>('collidable_set_raw_transform');
+  late final _collidable_set_raw_transform =
+      _collidable_set_raw_transformPtr.asFunction<
+          void Function(ffi.Pointer<wpCollidable>, ffi.Pointer<ffi.Float>)>();
+
+  void destroy_collidable(
+    ffi.Pointer<wpCollidable> collidable,
+  ) {
+    return _destroy_collidable(
+      collidable,
+    );
+  }
+
+  late final _destroy_collidablePtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<wpCollidable>)>>(
+          'destroy_collidable');
+  late final _destroy_collidable = _destroy_collidablePtr
+      .asFunction<void Function(ffi.Pointer<wpCollidable>)>();
+
+  /// Rigid bodies (which are also Collidables)
+  ffi.Pointer<wpBody> create_rigid_body(
+    double mass,
+    ffi.Pointer<wpShape> shape,
+  ) {
+    return _create_rigid_body(
+      mass,
+      shape,
+    );
+  }
+
+  late final _create_rigid_bodyPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Pointer<wpBody> Function(
+              ffi.Float, ffi.Pointer<wpShape>)>>('create_rigid_body');
+  late final _create_rigid_body = _create_rigid_bodyPtr
+      .asFunction<ffi.Pointer<wpBody> Function(double, ffi.Pointer<wpShape>)>();
+
+  /// Shapes.
   ffi.Pointer<wpShape> create_box_shape(
     double x,
     double y,
@@ -521,6 +680,37 @@ class FlutterBulletBindings {
       _create_static_plane_shapePtr.asFunction<
           ffi.Pointer<wpShape> Function(double, double, double, double)>();
 
+  void shape_set_dart_owner(
+    ffi.Pointer<wpShape> shape,
+    Object owner,
+  ) {
+    return _shape_set_dart_owner(
+      shape,
+      owner,
+    );
+  }
+
+  late final _shape_set_dart_ownerPtr = _lookup<
+          ffi
+          .NativeFunction<ffi.Void Function(ffi.Pointer<wpShape>, ffi.Handle)>>(
+      'shape_set_dart_owner');
+  late final _shape_set_dart_owner = _shape_set_dart_ownerPtr
+      .asFunction<void Function(ffi.Pointer<wpShape>, Object)>();
+
+  Object shape_get_dart_owner(
+    ffi.Pointer<wpShape> shape,
+  ) {
+    return _shape_get_dart_owner(
+      shape,
+    );
+  }
+
+  late final _shape_get_dart_ownerPtr =
+      _lookup<ffi.NativeFunction<ffi.Handle Function(ffi.Pointer<wpShape>)>>(
+          'shape_get_dart_owner');
+  late final _shape_get_dart_owner = _shape_get_dart_ownerPtr
+      .asFunction<Object Function(ffi.Pointer<wpShape>)>();
+
   void destroy_shape(
     ffi.Pointer<wpShape> shape,
   ) {
@@ -534,100 +724,6 @@ class FlutterBulletBindings {
           'destroy_shape');
   late final _destroy_shape =
       _destroy_shapePtr.asFunction<void Function(ffi.Pointer<wpShape>)>();
-
-  ffi.Pointer<wpBody> create_rigid_body(
-    double mass,
-    ffi.Pointer<wpShape> shape,
-  ) {
-    return _create_rigid_body(
-      mass,
-      shape,
-    );
-  }
-
-  late final _create_rigid_bodyPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Pointer<wpBody> Function(
-              ffi.Float, ffi.Pointer<wpShape>)>>('create_rigid_body');
-  late final _create_rigid_body = _create_rigid_bodyPtr
-      .asFunction<ffi.Pointer<wpBody> Function(double, ffi.Pointer<wpShape>)>();
-
-  void set_rigid_body_user_data(
-    ffi.Pointer<wpBody> body,
-    Object ref,
-  ) {
-    return _set_rigid_body_user_data(
-      body,
-      ref,
-    );
-  }
-
-  late final _set_rigid_body_user_dataPtr = _lookup<
-          ffi
-          .NativeFunction<ffi.Void Function(ffi.Pointer<wpBody>, ffi.Handle)>>(
-      'set_rigid_body_user_data');
-  late final _set_rigid_body_user_data = _set_rigid_body_user_dataPtr
-      .asFunction<void Function(ffi.Pointer<wpBody>, Object)>();
-
-  Object get_rigid_body_user_data(
-    ffi.Pointer<wpBody> body,
-  ) {
-    return _get_rigid_body_user_data(
-      body,
-    );
-  }
-
-  late final _get_rigid_body_user_dataPtr =
-      _lookup<ffi.NativeFunction<ffi.Handle Function(ffi.Pointer<wpBody>)>>(
-          'get_rigid_body_user_data');
-  late final _get_rigid_body_user_data = _get_rigid_body_user_dataPtr
-      .asFunction<Object Function(ffi.Pointer<wpBody>)>();
-
-  ffi.Pointer<ffi.Float> rigid_body_get_raw_transform(
-    ffi.Pointer<wpBody> body,
-  ) {
-    return _rigid_body_get_raw_transform(
-      body,
-    );
-  }
-
-  late final _rigid_body_get_raw_transformPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Pointer<ffi.Float> Function(
-              ffi.Pointer<wpBody>)>>('rigid_body_get_raw_transform');
-  late final _rigid_body_get_raw_transform = _rigid_body_get_raw_transformPtr
-      .asFunction<ffi.Pointer<ffi.Float> Function(ffi.Pointer<wpBody>)>();
-
-  void rigid_body_set_raw_transform(
-    ffi.Pointer<wpBody> body,
-    ffi.Pointer<ffi.Float> xform,
-  ) {
-    return _rigid_body_set_raw_transform(
-      body,
-      xform,
-    );
-  }
-
-  late final _rigid_body_set_raw_transformPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Void Function(ffi.Pointer<wpBody>,
-              ffi.Pointer<ffi.Float>)>>('rigid_body_set_raw_transform');
-  late final _rigid_body_set_raw_transform = _rigid_body_set_raw_transformPtr
-      .asFunction<void Function(ffi.Pointer<wpBody>, ffi.Pointer<ffi.Float>)>();
-
-  void destroy_rigid_body(
-    ffi.Pointer<wpBody> body,
-  ) {
-    return _destroy_rigid_body(
-      body,
-    );
-  }
-
-  late final _destroy_rigid_bodyPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<wpBody>)>>(
-          'destroy_rigid_body');
-  late final _destroy_rigid_body =
-      _destroy_rigid_bodyPtr.asFunction<void Function(ffi.Pointer<wpBody>)>();
 
   late final addresses = _SymbolAddresses(this);
 }
@@ -733,8 +829,49 @@ class _SymbolAddresses {
           ffi.NativeFunction<
               ffi.Void Function(ffi.Pointer<wpWorld>, ffi.Pointer<wpBody>)>>
       get world_remove_rigid_body => _library._world_remove_rigid_bodyPtr;
+  ffi.Pointer<
+          ffi.NativeFunction<
+              ffi.Void Function(
+                  ffi.Pointer<wpWorld>, ffi.Pointer<wpCollidable>)>>
+      get world_add_collidable => _library._world_add_collidablePtr;
+  ffi.Pointer<
+          ffi.NativeFunction<
+              ffi.Void Function(
+                  ffi.Pointer<wpWorld>, ffi.Pointer<wpCollidable>)>>
+      get world_remove_collidable => _library._world_remove_collidablePtr;
   ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<wpWorld>)>>
       get destroy_world => _library._destroy_worldPtr;
+  ffi.Pointer<ffi.NativeFunction<ffi.Pointer<wpCollidable> Function()>>
+      get create_collidable => _library._create_collidablePtr;
+  ffi.Pointer<
+          ffi.NativeFunction<
+              ffi.Void Function(ffi.Pointer<wpCollidable>, ffi.Handle)>>
+      get collidable_set_dart_owner => _library._collidable_set_dart_ownerPtr;
+  ffi.Pointer<
+          ffi.NativeFunction<ffi.Handle Function(ffi.Pointer<wpCollidable>)>>
+      get collidable_get_dart_owner => _library._collidable_get_dart_ownerPtr;
+  ffi.Pointer<
+          ffi.NativeFunction<
+              ffi.Void Function(
+                  ffi.Pointer<wpCollidable>, ffi.Pointer<wpShape>)>>
+      get collidable_set_shape => _library._collidable_set_shapePtr;
+  ffi.Pointer<
+          ffi.NativeFunction<
+              ffi.Pointer<ffi.Float> Function(ffi.Pointer<wpCollidable>)>>
+      get collidable_get_raw_transform =>
+          _library._collidable_get_raw_transformPtr;
+  ffi.Pointer<
+          ffi.NativeFunction<
+              ffi.Void Function(
+                  ffi.Pointer<wpCollidable>, ffi.Pointer<ffi.Float>)>>
+      get collidable_set_raw_transform =>
+          _library._collidable_set_raw_transformPtr;
+  ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<wpCollidable>)>>
+      get destroy_collidable => _library._destroy_collidablePtr;
+  ffi.Pointer<
+          ffi.NativeFunction<
+              ffi.Pointer<wpBody> Function(ffi.Float, ffi.Pointer<wpShape>)>>
+      get create_rigid_body => _library._create_rigid_bodyPtr;
   ffi.Pointer<
           ffi.NativeFunction<
               ffi.Pointer<wpShape> Function(ffi.Float, ffi.Float, ffi.Float)>>
@@ -744,30 +881,14 @@ class _SymbolAddresses {
               ffi.Pointer<wpShape> Function(
                   ffi.Float, ffi.Float, ffi.Float, ffi.Float)>>
       get create_static_plane_shape => _library._create_static_plane_shapePtr;
+  ffi.Pointer<
+          ffi
+          .NativeFunction<ffi.Void Function(ffi.Pointer<wpShape>, ffi.Handle)>>
+      get shape_set_dart_owner => _library._shape_set_dart_ownerPtr;
+  ffi.Pointer<ffi.NativeFunction<ffi.Handle Function(ffi.Pointer<wpShape>)>>
+      get shape_get_dart_owner => _library._shape_get_dart_ownerPtr;
   ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<wpShape>)>>
       get destroy_shape => _library._destroy_shapePtr;
-  ffi.Pointer<
-          ffi.NativeFunction<
-              ffi.Pointer<wpBody> Function(ffi.Float, ffi.Pointer<wpShape>)>>
-      get create_rigid_body => _library._create_rigid_bodyPtr;
-  ffi.Pointer<
-          ffi
-          .NativeFunction<ffi.Void Function(ffi.Pointer<wpBody>, ffi.Handle)>>
-      get set_rigid_body_user_data => _library._set_rigid_body_user_dataPtr;
-  ffi.Pointer<ffi.NativeFunction<ffi.Handle Function(ffi.Pointer<wpBody>)>>
-      get get_rigid_body_user_data => _library._get_rigid_body_user_dataPtr;
-  ffi.Pointer<
-          ffi
-          .NativeFunction<ffi.Pointer<ffi.Float> Function(ffi.Pointer<wpBody>)>>
-      get rigid_body_get_raw_transform =>
-          _library._rigid_body_get_raw_transformPtr;
-  ffi.Pointer<
-          ffi.NativeFunction<
-              ffi.Void Function(ffi.Pointer<wpBody>, ffi.Pointer<ffi.Float>)>>
-      get rigid_body_set_raw_transform =>
-          _library._rigid_body_set_raw_transformPtr;
-  ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<wpBody>)>>
-      get destroy_rigid_body => _library._destroy_rigid_bodyPtr;
 }
 
 typedef Dart_PostCObject_Type = ffi.Pointer<
@@ -1087,5 +1208,7 @@ typedef Dart_UpdateFinalizableExternalSize_Type = ffi.Pointer<
 final class wpWorld extends ffi.Opaque {}
 
 final class wpShape extends ffi.Opaque {}
+
+final class wpCollidable extends ffi.Opaque {}
 
 final class wpBody extends ffi.Opaque {}

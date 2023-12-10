@@ -74,7 +74,5 @@ intptr_t Dart_InitializeApiDL(void* data) {
   name##_DL = name##_Deprecated;
   DART_API_DEPRECATED_DL_SYMBOLS(DART_API_DEPRECATED_DL_INIT)
 #undef DART_API_DEPRECATED_DL_INIT
-
-  fprintf(stderr, "Initialized native crap\n");
   return 0;
 }

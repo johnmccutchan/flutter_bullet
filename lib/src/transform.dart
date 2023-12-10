@@ -1,5 +1,4 @@
-import 'package:vector_math/vector_math.dart';
-import 'dart:typed_data';
+part of '../physics3d.dart';
 
 // Only supports translation and rotation.
 class Transform {

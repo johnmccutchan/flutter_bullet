@@ -1,7 +1,4 @@
-import 'dart:ffi' as ffi;
-
-import 'src/flutter_bullet_bindings.dart';
-import 'package:vector_math/vector_math.dart';
+part of '../physics3d.dart';
 
 class CollisionShape implements ffi.Finalizable {
   static final _finalizer =
@@ -9,12 +6,9 @@ class CollisionShape implements ffi.Finalizable {
 
   ffi.Pointer<wpShape> _nativeShape;
 
-  ffi.Pointer<wpShape> get nativeShape {
-    return _nativeShape;
-  }
-
   CollisionShape._(this._nativeShape) {
     _finalizer.attach(this, _nativeShape.cast(), detach: this);
+    bindings.shape_set_dart_owner(_nativeShape, this);
   }
 }
 

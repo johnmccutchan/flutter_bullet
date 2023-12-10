@@ -1,5 +1,6 @@
 #include "flutter_bullet.h"
 
+#include <cstddef>
 #include <memory>
 
 // Linear math
@@ -23,15 +24,23 @@
 #include "bullet3/src/BulletDynamics/ConstraintSolver/btSequentialImpulseConstraintSolver.h"
 #include "bullet3/src/BulletDynamics/Dynamics/btDiscreteDynamicsWorld.h"
 
+// Collidable
+#include "bullet3/src/BulletCollision/CollisionDispatch/btCollisionObject.h"
+
 // Rigid body
 #include "bullet3/src/BulletDynamics/Dynamics/btRigidBody.h"
 
 // Shapes
+#include "bullet3/src/BulletCollision/CollisionShapes/btCollisionShape.h"
 #include "bullet3/src/BulletCollision/CollisionShapes/btBoxShape.h"
 #include "bullet3/src/BulletCollision/CollisionShapes/btStaticPlaneShape.h"
 
 #include "dart_api.h"
 #include "dart_api_dl.h"
+
+static void NoopFinalizer(void* isolate_callback_data, void* peer) {
+  // We must pass in a non-null callback to Dart_NewWeakPersistentHandle_DL.
+}
 
 class WrappedPhysicsWorld {
  public:
@@ -71,14 +80,24 @@ FFI_PLUGIN_EXPORT void world_add_rigid_body(wpWorld* world, wpBody* body) {
   WrappedPhysicsWorld* _world = reinterpret_cast<WrappedPhysicsWorld*>(world);
   btRigidBody* _body = reinterpret_cast<btRigidBody*>(body);
   _world->world()->addRigidBody(_body);
-  printf("LLL\n");
 }
 
 FFI_PLUGIN_EXPORT void world_remove_rigid_body(wpWorld* world, wpBody* body) {
   WrappedPhysicsWorld* _world = reinterpret_cast<WrappedPhysicsWorld*>(world);
   btRigidBody* _body = reinterpret_cast<btRigidBody*>(body);
   _world->world()->removeRigidBody(_body);
-  printf("KKK\n");
+}
+
+FFI_PLUGIN_EXPORT void world_add_collidable(wpWorld* world, wpCollidable* collidable) {
+  WrappedPhysicsWorld* _world = reinterpret_cast<WrappedPhysicsWorld*>(world);
+  btCollisionObject* _object = reinterpret_cast<btCollisionObject*>(collidable);
+  _world->world()->addCollisionObject(_object);
+}
+
+FFI_PLUGIN_EXPORT void world_remove_collidable(wpWorld* world, wpCollidable* collidable) {
+  WrappedPhysicsWorld* _world = reinterpret_cast<WrappedPhysicsWorld*>(world);
+  btCollisionObject* _object = reinterpret_cast<btCollisionObject*>(collidable);
+  _world->world()->removeCollisionObject(_object);
 }
 
 FFI_PLUGIN_EXPORT void destroy_world(wpWorld* world) {
@@ -86,20 +105,61 @@ FFI_PLUGIN_EXPORT void destroy_world(wpWorld* world) {
   delete _world;
 }
 
-FFI_PLUGIN_EXPORT wpShape* create_box_shape(float x, float y, float z) {
-  btVector3 halfExtents(x, y, z);
-  return reinterpret_cast<wpShape*>(new btBoxShape(halfExtents));
+FFI_PLUGIN_EXPORT wpCollidable* create_collidable() {
+  btCollisionObject* object = new btCollisionObject();
+  return reinterpret_cast<wpCollidable*>(object);
 }
 
-FFI_PLUGIN_EXPORT wpShape* create_static_plane_shape(float nx, float ny, float nz, float c) {
-  btVector3 planeNormal(nx, ny, nz);
-  btScalar planeConstant = c;
-  return reinterpret_cast<wpShape*>(new btStaticPlaneShape(planeNormal, planeConstant));
+FFI_PLUGIN_EXPORT void collidable_set_dart_owner(wpCollidable* collidable, Dart_Handle owner) {
+  btCollisionObject* _object = reinterpret_cast<btCollisionObject*>(collidable);
+  Dart_WeakPersistentHandle weak_ref = Dart_NewWeakPersistentHandle_DL(owner, nullptr, 0, NoopFinalizer);
+  _object->setUserPointer(reinterpret_cast<void*>(weak_ref));
 }
 
-FFI_PLUGIN_EXPORT void destroy_shape(wpShape* shape) {
+FFI_PLUGIN_EXPORT Dart_Handle collidable_get_dart_owner(wpCollidable* collidable) {
+  btCollisionObject* _object = reinterpret_cast<btCollisionObject*>(collidable);
+  return Dart_HandleFromWeakPersistent_DL(reinterpret_cast<Dart_WeakPersistentHandle>(_object->getUserPointer()));
+}
+
+FFI_PLUGIN_EXPORT void collidable_set_shape(wpCollidable* collidable, wpShape* shape) {
+  btCollisionObject* _object = reinterpret_cast<btCollisionObject*>(collidable);
   btCollisionShape* _shape = reinterpret_cast<btCollisionShape*>(shape);
-  delete _shape;
+  _object->setCollisionShape(_shape);
+}
+
+FFI_PLUGIN_EXPORT const float* collidable_get_raw_transform(wpCollidable* collidable) {
+  btCollisionObject* _object = reinterpret_cast<btCollisionObject*>(collidable);
+  const btTransform& xform = _object->getWorldTransform();
+  const btMatrix3x3& rotation = xform.getBasis();
+  const btVector3& start = rotation.getRow(0);
+  return static_cast<const btScalar*>(start);
+}
+
+FFI_PLUGIN_EXPORT void collidable_set_raw_transform(wpCollidable* collidable, const float* m) {
+  btCollisionObject* _object = reinterpret_cast<btCollisionObject*>(collidable);
+  btTransform tform;
+  tform.setFromOpenGLMatrix(m);
+  if (btRigidBody::upcast(_object) != nullptr) {
+    btRigidBody* _body = btRigidBody::upcast(_object);
+    _body->setCenterOfMassTransform(tform);
+  } else {
+    _object->setWorldTransform(tform);
+  }
+}
+
+FFI_PLUGIN_EXPORT void destroy_collidable(wpCollidable* collidable) {
+  btCollisionObject* _object = reinterpret_cast<btCollisionObject*>(collidable);
+  if (_object->getUserPointer() != nullptr) {
+    Dart_DeleteWeakPersistentHandle_DL(reinterpret_cast<Dart_WeakPersistentHandle>(_object->getUserPointer()));
+  }
+  if (btRigidBody::upcast(_object) != nullptr) {
+    btRigidBody* _body = btRigidBody::upcast(_object);
+    btMotionState* motionState = _body->getMotionState();
+    delete motionState;
+    delete _body;
+  } else {
+    delete _object;
+  }
 }
 
 FFI_PLUGIN_EXPORT wpBody* create_rigid_body(float mass, wpShape* shape) {
@@ -124,50 +184,33 @@ FFI_PLUGIN_EXPORT wpBody* create_rigid_body(float mass, wpShape* shape) {
   return reinterpret_cast<wpBody*>(new btRigidBody(mass, motionState, _shape, localInertia));
 }
 
-static void NoopFinalizer(void* isolate_callback_data, void* peer) {
-  // We must pass in a non-null callback to Dart_NewWeakPersistentHandle_DL.
+FFI_PLUGIN_EXPORT wpShape* create_box_shape(float x, float y, float z) {
+  btVector3 halfExtents(x, y, z);
+  return reinterpret_cast<wpShape*>(new btBoxShape(halfExtents));
 }
 
-FFI_PLUGIN_EXPORT void set_rigid_body_user_data(wpBody* body, Dart_Handle ref) {
-  btRigidBody* _body = reinterpret_cast<btRigidBody*>(body);
-  Dart_WeakPersistentHandle weak_ref = Dart_NewWeakPersistentHandle_DL(ref, nullptr, 0, NoopFinalizer);
-  void* user_data = reinterpret_cast<void*>(weak_ref);
-  _body->setUserPointer(user_data);
+FFI_PLUGIN_EXPORT wpShape* create_static_plane_shape(float nx, float ny, float nz, float c) {
+  btVector3 planeNormal(nx, ny, nz);
+  btScalar planeConstant = c;
+  return reinterpret_cast<wpShape*>(new btStaticPlaneShape(planeNormal, planeConstant));
 }
 
-FFI_PLUGIN_EXPORT Dart_Handle get_rigid_body_user_data(wpBody* body) {
-  btRigidBody* _body = reinterpret_cast<btRigidBody*>(body);
-  void* user_data = _body->getUserPointer();
-  return Dart_HandleFromWeakPersistent_DL(reinterpret_cast<Dart_WeakPersistentHandle>(_body->getUserPointer()));
+FFI_PLUGIN_EXPORT void shape_set_dart_owner(wpShape* shape, Dart_Handle owner) {
+  btCollisionShape* _shape = reinterpret_cast<btCollisionShape*>(shape);
+  Dart_WeakPersistentHandle weak_ref = Dart_NewWeakPersistentHandle_DL(owner, nullptr, 0, NoopFinalizer);
+  _shape->setUserPointer(reinterpret_cast<void*>(weak_ref));
 }
 
-FFI_PLUGIN_EXPORT const float* rigid_body_get_origin(wpBody* body) {
-  btRigidBody* _body = reinterpret_cast<btRigidBody*>(body);
-  return static_cast<const btScalar*>(_body->getCenterOfMassPosition());
+FFI_PLUGIN_EXPORT Dart_Handle shape_get_dart_owner(wpShape* shape) {
+  btCollisionShape* _shape = reinterpret_cast<btCollisionShape*>(shape);
+  return Dart_HandleFromWeakPersistent_DL(reinterpret_cast<Dart_WeakPersistentHandle>(_shape->getUserPointer()));
 }
 
-FFI_PLUGIN_EXPORT const float* rigid_body_get_raw_transform(wpBody* body) {
-  btRigidBody* _body = reinterpret_cast<btRigidBody*>(body);
-  const btTransform& xform = _body->getCenterOfMassTransform();
-  const btMatrix3x3& rotation = xform.getBasis();
-  const btVector3& start = rotation.getRow(0);
-  return static_cast<const btScalar*>(start);
-}
 
-FFI_PLUGIN_EXPORT void rigid_body_set_raw_transform(wpBody* body, const float* m) {
-  btRigidBody* _body = reinterpret_cast<btRigidBody*>(body);
-  btTransform tform;
-  tform.setFromOpenGLMatrix(m);
-  _body->setCenterOfMassTransform(tform);
-}
-
-FFI_PLUGIN_EXPORT void destroy_rigid_body(wpBody* body) {
-  btRigidBody* _body = reinterpret_cast<btRigidBody*>(body);
-  void* user_data = _body->getUserPointer();
-  if (user_data != nullptr) {
-    Dart_DeleteWeakPersistentHandle_DL(reinterpret_cast<Dart_WeakPersistentHandle>(user_data));
+FFI_PLUGIN_EXPORT void destroy_shape(wpShape* shape) {
+  btCollisionShape* _shape = reinterpret_cast<btCollisionShape*>(shape);
+  if (_shape->getUserPointer() != nullptr) {
+    Dart_DeleteWeakPersistentHandle_DL(reinterpret_cast<Dart_WeakPersistentHandle>(_shape->getUserPointer()));
   }
-  btMotionState* motionState = _body->getMotionState();
-  delete motionState;
-  delete _body;
+  delete _shape;
 }

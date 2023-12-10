@@ -16,12 +16,12 @@ main() {
   var dynamicBody = RigidBody(1.0, box);
   dynamicBody.xform = Transform()..origin = Vector3(0, 10, 0);
 
-  // Make a static body (mass == 0.0) with the static plane shape
-  // place it at the origin.
-  var floorBody = RigidBody(0.0, plane);
+  // Make a static collidable.
+  var floor = Collidable();
+  floor.shape = plane;
 
   world.addBody(dynamicBody);
-  world.addBody(floorBody);
+  world.addCollidable(floor);
 
   // 1/60.
   final dt = 0.0625;
@@ -32,6 +32,5 @@ main() {
     var origin = dynamicBody.xform.origin;
     var rotation = dynamicBody.xform.rotation;
     print(origin);
-    print(rotation);
   }
 }
