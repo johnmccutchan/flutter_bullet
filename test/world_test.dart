@@ -33,4 +33,7 @@ main() {
     var rotation = dynamicBody.xform.rotation;
     print(origin);
   }
+
+  world.removeBody(dynamicBody);
+  world.removeCollidable(floor);
 }
