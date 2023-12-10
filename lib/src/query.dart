@@ -23,7 +23,7 @@ final class RayHit {
   }
 
   String toString() {
-    return 'hit $fraction ($point) normal $normal';
+    return 'RayHit $fraction ($point) normal $normal';
   }
 }
 
