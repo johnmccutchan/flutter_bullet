@@ -29,6 +29,8 @@ typedef struct wpShape wpShape;
 typedef struct wpCollidable wpCollidable;
 // Opaque type of a rigid body in the world.
 typedef struct wpBody wpBody;  // Extends wpCollidable.
+// Opaque type of collidable state.
+typedef struct wpCollidableState wpCollidableState;
 
 FFI_PLUGIN_EXPORT wpWorld* create_world();
 
@@ -52,20 +54,27 @@ FFI_PLUGIN_EXPORT void destroy_world(wpWorld* world);
 // Collidables
 FFI_PLUGIN_EXPORT wpCollidable* create_collidable();
 
-FFI_PLUGIN_EXPORT void collidable_set_dart_owner(wpCollidable* collidable, Dart_Handle owner);
-
-FFI_PLUGIN_EXPORT Dart_Handle collidable_get_dart_owner(const wpCollidable* collidable);
-
 FFI_PLUGIN_EXPORT void collidable_set_shape(wpCollidable* collidable, wpShape* shape);
-
-FFI_PLUGIN_EXPORT const float* collidable_get_raw_transform(wpCollidable* collidable);
-
-FFI_PLUGIN_EXPORT void collidable_set_raw_transform(wpCollidable* collidable, const float* m);
 
 FFI_PLUGIN_EXPORT void destroy_collidable(wpCollidable* collidable);
 
 // Rigid bodies (which are also Collidables)
 FFI_PLUGIN_EXPORT wpBody* create_rigid_body(float mass, wpShape* shape);
+
+// NOTE: destroy_rigid_body is handled by destroy_collidable.
+
+// Get collidable state for the collidable.
+FFI_PLUGIN_EXPORT wpCollidableState* collidable_create_state(wpCollidable* collidable,
+                                                             Dart_Handle owner,
+                                                             void (*transform_update)(Dart_Handle));
+
+FFI_PLUGIN_EXPORT void collidable_state_set_dart_owner(wpCollidableState* collidable_state, Dart_Handle owner);
+
+FFI_PLUGIN_EXPORT Dart_Handle collidable_state_get_dart_owner(wpCollidableState* collidable_state);
+
+FFI_PLUGIN_EXPORT float* collidable_state_get_matrix(wpCollidableState* motion_state);
+
+FFI_PLUGIN_EXPORT void collidable_state_matrix_updated(wpCollidableState* collidable_state);
 
 // Shapes.
 FFI_PLUGIN_EXPORT wpShape* create_box_shape(float x, float y, float z);

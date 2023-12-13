@@ -83,5 +83,6 @@ class World implements ffi.Finalizable {
         exceptionalReturn: 0.0);
     bindings.world_raycast(_nativeWorld, start.x, start.y, start.z, end.x,
         end.y, end.z, callback.nativeFunction);
+    callback.close();
   }
 }

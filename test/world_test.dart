@@ -19,13 +19,17 @@ main() {
 
   var bodies = <RigidBody>[];
 
+  Matrix4 t = Matrix4.identity();
   // Create a vertical tower of 4 bodies.
   for (int i = 0; i < 4; i++) {
     // Make a dynamic body with mass 1.0 with the box shape.
     var body = new RigidBody(1.0, box);
-    body.xform = Transform()..origin = Vector3(0, 6 - i * 1.1, 0);
+    t.setTranslationRaw(0, 6 - i * 1.1, 0);
+    body.xform.setFromMatrix(t);
     world.addBody(body);
     bodies.add(body);
+    print('INITIAL O=[$i] - ${body.xform.origin}');
+    print('INITIAL R=[$i] - ${body.xform.rotation}');
   }
 
   int bodyHitCount = 0;
@@ -50,6 +54,12 @@ main() {
       var body = bodies[b];
       print('[$b] - ${body.xform.origin}');
     }
+  }
+
+  for (int b = 0; b < bodies.length; b++) {
+    var body = bodies[b];
+    print('FINAL O=[$b] - ${body.xform.origin}');
+    print('FINAL R=[$b] - ${body.xform.rotation}');
   }
 
   // Clear world.

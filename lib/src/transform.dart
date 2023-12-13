@@ -1,15 +1,26 @@
 part of '../physics3d.dart';
 
+typedef VoidCallback = void Function();
+
 // Only supports translation and rotation.
 class Transform {
-  // TODO(johnmccutchan): A lot of this code should be optimized to allocate
-  // fewer temporary objects, etc.
-  Matrix4 _impl;
-  static Matrix3 _matrix3 = Matrix3.identity();
+  static Matrix3 _tempStorage = Matrix3.identity();
+  final Matrix4 _impl;
+  final Collidable _collidable;
+  LinkedHashSet<VoidCallback> _listeners = new LinkedHashSet<VoidCallback>();
 
-  Transform() : _impl = Matrix4.identity();
+  Transform._(this._collidable, Float32List list)
+      : _impl = Matrix4.fromFloat32List(list);
 
-  Transform.fromList(Float32List v) : _impl = Matrix4.fromFloat32List(v);
+  void _runListeners() {
+    for (final cb in _listeners) {
+      cb();
+    }
+  }
+
+  void _notifyNativeCode() {
+    _collidable._notifyNativeCode();
+  }
 
   Vector3 get origin {
     return _impl.getTranslation();
@@ -17,19 +28,46 @@ class Transform {
 
   set origin(Vector3 o) {
     _impl.setTranslation(o);
+    _notifyNativeCode();
+    _runListeners();
   }
 
   Quaternion get rotation {
-    _impl.copyRotation(_matrix3);
-    return Quaternion.fromRotation(_matrix3);
+    _impl.copyRotation(_tempStorage);
+    return Quaternion.fromRotation(_tempStorage);
   }
 
   set rotation(Quaternion q) {
-    q.copyRotationInto(_matrix3);
-    _impl.setRotation(_matrix3);
+    q.copyRotationInto(_tempStorage);
+    _impl.setRotation(_tempStorage);
+    _notifyNativeCode();
+    _runListeners();
   }
 
-  UnmodifiableFloat32ListView get storage {
+  UnmodifiableFloat32ListView get matrix {
     return UnmodifiableFloat32ListView(_impl.storage);
+  }
+
+  void setFromTransform(Transform t) {
+    _impl.copyFromArray(t.matrix);
+    _notifyNativeCode();
+    _runListeners();
+  }
+
+  void setFromMatrix(Matrix4 t) {
+    _impl.copyFromArray(t.storage);
+    _notifyNativeCode();
+    _runListeners();
+  }
+
+  // Be notified whenever this Transform changes (either by Dart code
+  // explicitly changing this or by the simulation update).
+  // Use to synchronize the graphics object.
+  void addListener(VoidCallback cb) {
+    _listeners.add(cb);
+  }
+
+  void removeListener(VoidCallback cb) {
+    _listeners.remove(cb);
   }
 }

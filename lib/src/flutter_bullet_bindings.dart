@@ -2,7 +2,7 @@ import 'dart:io';
 import 'dart:ffi' as ffi;
 import 'flutter_bullet_bindings_generated.dart';
 export 'flutter_bullet_bindings_generated.dart'
-    show wpBody, wpShape, wpWorld, wpCollidable;
+    show wpWorld, wpCollidable, wpCollidableState, wpBody, wpShape;
 
 /// The dynamic library in which the symbols for [FlutterBulletBindings] can be found.
 final ffi.DynamicLibrary _dylib = () {

@@ -67,6 +67,59 @@ private:
   std::unique_ptr<btDynamicsWorld> world_;
 };
 
+// An instance of this is allocated and stored inside each btCollisionObject's userPointer field.
+class CollidableState : public btMotionState {
+ public:
+  CollidableState(btCollisionObject* object,
+                  Dart_Handle owner,
+                  void (*transform_update)(Dart_Handle)) :
+                  object_(object),
+                  owner_(Dart_NewWeakPersistentHandle_DL(owner, nullptr, 0, NoopFinalizer)),
+                  transform_update_(transform_update) {
+    // Identity.
+    matrix_[0] = 1.0;
+    matrix_[3] = 1.0;
+    matrix_[7] = 1.0;
+    matrix_[11] = 1.0;
+    matrix_[15] = 1.0;
+  }
+
+  virtual ~CollidableState() {
+    Dart_DeleteWeakPersistentHandle_DL(owner_);
+  }
+
+  virtual void getWorldTransform(btTransform& worldTrans) const {
+    worldTrans.setFromOpenGLMatrix(&matrix_[0]);
+  }
+
+	virtual void setWorldTransform(const btTransform& worldTrans) {
+    worldTrans.getOpenGLMatrix(&matrix_[0]);
+    if (transform_update_ != nullptr) {
+      transform_update_(Dart_HandleFromWeakPersistent_DL(owner_));
+    }
+  }
+
+  btCollisionObject* object() {
+    return object_;
+  }
+
+  float* matrix() {
+    return &matrix_[0];
+  }
+
+  Dart_WeakPersistentHandle owner() {
+    return owner_;
+  }
+
+ private:
+  // The raw Transformation matrix.
+  btScalar matrix_[16];
+  btCollisionObject* object_;
+  Dart_WeakPersistentHandle owner_;
+  void (*transform_update_)(Dart_Handle);
+};
+
+
 FFI_PLUGIN_EXPORT wpWorld *create_world() {
   return reinterpret_cast<wpWorld *>(new WrappedPhysicsWorld());
 }
@@ -121,8 +174,8 @@ public:
           rayResult.m_collisionObject->getWorldTransform().getBasis() *
           rayResult.m_hitNormalLocal;
     }
-    return m_cb(collidable_get_dart_owner(reinterpret_cast<const wpCollidable *>(
-                    rayResult.m_collisionObject)),
+    CollidableState* state = reinterpret_cast<CollidableState*>(rayResult.m_collisionObject->getUserPointer());
+    return m_cb(Dart_HandleFromWeakPersistent_DL(state->owner()),
                 rayResult.m_hitFraction,
                 static_cast<btScalar *>(hitNormalWorld));
   };
@@ -160,14 +213,6 @@ FFI_PLUGIN_EXPORT void collidable_set_dart_owner(wpCollidable *collidable,
   _object->setUserPointer(reinterpret_cast<void *>(weak_ref));
 }
 
-FFI_PLUGIN_EXPORT Dart_Handle
-collidable_get_dart_owner(const wpCollidable *collidable) {
-  const btCollisionObject *_object =
-      reinterpret_cast<const btCollisionObject *>(collidable);
-  return Dart_HandleFromWeakPersistent_DL(
-      reinterpret_cast<Dart_WeakPersistentHandle>(_object->getUserPointer()));
-}
-
 FFI_PLUGIN_EXPORT void collidable_set_shape(wpCollidable *collidable,
                                             wpShape *shape) {
   btCollisionObject *_object =
@@ -176,44 +221,52 @@ FFI_PLUGIN_EXPORT void collidable_set_shape(wpCollidable *collidable,
   _object->setCollisionShape(_shape);
 }
 
-FFI_PLUGIN_EXPORT const float *
-collidable_get_raw_transform(wpCollidable *collidable) {
-  btCollisionObject *_object =
-      reinterpret_cast<btCollisionObject *>(collidable);
-  const btTransform &xform = _object->getWorldTransform();
-  const btMatrix3x3 &rotation = xform.getBasis();
-  const btVector3 &start = rotation.getRow(0);
-  return static_cast<const btScalar *>(start);
-}
-
-FFI_PLUGIN_EXPORT void collidable_set_raw_transform(wpCollidable *collidable,
-                                                    const float *m) {
-  btCollisionObject *_object =
-      reinterpret_cast<btCollisionObject *>(collidable);
-  btTransform tform;
-  tform.setFromOpenGLMatrix(m);
-  if (btRigidBody::upcast(_object) != nullptr) {
-    btRigidBody *_body = btRigidBody::upcast(_object);
-    _body->setCenterOfMassTransform(tform);
-  } else {
-    _object->setWorldTransform(tform);
-  }
-}
-
 FFI_PLUGIN_EXPORT void destroy_collidable(wpCollidable *collidable) {
   btCollisionObject *_object =
       reinterpret_cast<btCollisionObject *>(collidable);
   if (_object->getUserPointer() != nullptr) {
-    Dart_DeleteWeakPersistentHandle_DL(
-        reinterpret_cast<Dart_WeakPersistentHandle>(_object->getUserPointer()));
+    CollidableState* state = reinterpret_cast<CollidableState*>(_object->getUserPointer());
+    delete state;
   }
-  if (btRigidBody::upcast(_object) != nullptr) {
-    btRigidBody *_body = btRigidBody::upcast(_object);
-    btMotionState *motionState = _body->getMotionState();
-    delete motionState;
-    delete _body;
+  delete _object;
+}
+
+FFI_PLUGIN_EXPORT wpCollidableState* collidable_create_state(wpCollidable* collidable,
+                                                             Dart_Handle owner,
+                                                             void (*transform_update)(Dart_Handle)) {
+  btCollisionObject* object = reinterpret_cast<btCollisionObject*>(collidable);
+  CollidableState* state = new CollidableState(object, owner, transform_update);
+  btCollisionObject *_object =
+      reinterpret_cast<btCollisionObject *>(collidable);
+  _object->setUserPointer(state);
+  btRigidBody *_body = btRigidBody::upcast(_object);
+  if (_body != nullptr) {
+    _body->setMotionState(state);
+  }
+  return reinterpret_cast<wpCollidableState*>(state);
+}
+
+FFI_PLUGIN_EXPORT Dart_Handle collidable_state_get_dart_owner(wpCollidableState* collidable_state) {
+  CollidableState* state = reinterpret_cast<CollidableState*>(collidable_state);
+  return Dart_HandleFromWeakPersistent_DL(
+        reinterpret_cast<Dart_WeakPersistentHandle>(state->owner()));
+}
+
+FFI_PLUGIN_EXPORT float* collidable_state_get_matrix(wpCollidableState* collidable_state) {
+  CollidableState* state = reinterpret_cast<CollidableState*>(collidable_state);
+  return state->matrix();
+}
+
+FFI_PLUGIN_EXPORT void collidable_state_matrix_updated(wpCollidableState* collidable_state) {
+  CollidableState* state = reinterpret_cast<CollidableState*>(collidable_state);
+  btCollisionObject *_object = state->object();
+  btTransform tform;
+  tform.setFromOpenGLMatrix(state->matrix());
+  btRigidBody *_body = btRigidBody::upcast(_object);
+  if (_body != nullptr) {
+    _body->setCenterOfMassTransform(tform);
   } else {
-    delete _object;
+    _object->setWorldTransform(tform);
   }
 }
 

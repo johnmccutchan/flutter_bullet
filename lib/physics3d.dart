@@ -1,5 +1,7 @@
 import 'dart:ffi' as ffi;
 import 'dart:typed_data';
+import 'dart:collection';
+
 import 'src/flutter_bullet_bindings.dart';
 import 'package:ffi/ffi.dart';
 import 'package:vector_math/vector_math.dart';

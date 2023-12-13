@@ -581,37 +581,6 @@ class FlutterBulletBindings {
   late final _create_collidable =
       _create_collidablePtr.asFunction<ffi.Pointer<wpCollidable> Function()>();
 
-  void collidable_set_dart_owner(
-    ffi.Pointer<wpCollidable> collidable,
-    Object owner,
-  ) {
-    return _collidable_set_dart_owner(
-      collidable,
-      owner,
-    );
-  }
-
-  late final _collidable_set_dart_ownerPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Void Function(ffi.Pointer<wpCollidable>,
-              ffi.Handle)>>('collidable_set_dart_owner');
-  late final _collidable_set_dart_owner = _collidable_set_dart_ownerPtr
-      .asFunction<void Function(ffi.Pointer<wpCollidable>, Object)>();
-
-  Object collidable_get_dart_owner(
-    ffi.Pointer<wpCollidable> collidable,
-  ) {
-    return _collidable_get_dart_owner(
-      collidable,
-    );
-  }
-
-  late final _collidable_get_dart_ownerPtr = _lookup<
-          ffi.NativeFunction<ffi.Handle Function(ffi.Pointer<wpCollidable>)>>(
-      'collidable_get_dart_owner');
-  late final _collidable_get_dart_owner = _collidable_get_dart_ownerPtr
-      .asFunction<Object Function(ffi.Pointer<wpCollidable>)>();
-
   void collidable_set_shape(
     ffi.Pointer<wpCollidable> collidable,
     ffi.Pointer<wpShape> shape,
@@ -628,39 +597,6 @@ class FlutterBulletBindings {
               ffi.Pointer<wpShape>)>>('collidable_set_shape');
   late final _collidable_set_shape = _collidable_set_shapePtr.asFunction<
       void Function(ffi.Pointer<wpCollidable>, ffi.Pointer<wpShape>)>();
-
-  ffi.Pointer<ffi.Float> collidable_get_raw_transform(
-    ffi.Pointer<wpCollidable> collidable,
-  ) {
-    return _collidable_get_raw_transform(
-      collidable,
-    );
-  }
-
-  late final _collidable_get_raw_transformPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Pointer<ffi.Float> Function(
-              ffi.Pointer<wpCollidable>)>>('collidable_get_raw_transform');
-  late final _collidable_get_raw_transform = _collidable_get_raw_transformPtr
-      .asFunction<ffi.Pointer<ffi.Float> Function(ffi.Pointer<wpCollidable>)>();
-
-  void collidable_set_raw_transform(
-    ffi.Pointer<wpCollidable> collidable,
-    ffi.Pointer<ffi.Float> m,
-  ) {
-    return _collidable_set_raw_transform(
-      collidable,
-      m,
-    );
-  }
-
-  late final _collidable_set_raw_transformPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Void Function(ffi.Pointer<wpCollidable>,
-              ffi.Pointer<ffi.Float>)>>('collidable_set_raw_transform');
-  late final _collidable_set_raw_transform =
-      _collidable_set_raw_transformPtr.asFunction<
-          void Function(ffi.Pointer<wpCollidable>, ffi.Pointer<ffi.Float>)>();
 
   void destroy_collidable(
     ffi.Pointer<wpCollidable> collidable,
@@ -693,6 +629,98 @@ class FlutterBulletBindings {
               ffi.Float, ffi.Pointer<wpShape>)>>('create_rigid_body');
   late final _create_rigid_body = _create_rigid_bodyPtr
       .asFunction<ffi.Pointer<wpBody> Function(double, ffi.Pointer<wpShape>)>();
+
+  /// Get collidable state for the collidable.
+  ffi.Pointer<wpCollidableState> collidable_create_state(
+    ffi.Pointer<wpCollidable> collidable,
+    Object owner,
+    ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Handle)>>
+        transform_update,
+  ) {
+    return _collidable_create_state(
+      collidable,
+      owner,
+      transform_update,
+    );
+  }
+
+  late final _collidable_create_statePtr = _lookup<
+          ffi.NativeFunction<
+              ffi.Pointer<wpCollidableState> Function(
+                  ffi.Pointer<wpCollidable>,
+                  ffi.Handle,
+                  ffi.Pointer<
+                      ffi.NativeFunction<ffi.Void Function(ffi.Handle)>>)>>(
+      'collidable_create_state');
+  late final _collidable_create_state = _collidable_create_statePtr.asFunction<
+      ffi.Pointer<wpCollidableState> Function(ffi.Pointer<wpCollidable>, Object,
+          ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Handle)>>)>();
+
+  void collidable_state_set_dart_owner(
+    ffi.Pointer<wpCollidableState> collidable_state,
+    Object owner,
+  ) {
+    return _collidable_state_set_dart_owner(
+      collidable_state,
+      owner,
+    );
+  }
+
+  late final _collidable_state_set_dart_ownerPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Void Function(ffi.Pointer<wpCollidableState>,
+              ffi.Handle)>>('collidable_state_set_dart_owner');
+  late final _collidable_state_set_dart_owner =
+      _collidable_state_set_dart_ownerPtr
+          .asFunction<void Function(ffi.Pointer<wpCollidableState>, Object)>();
+
+  Object collidable_state_get_dart_owner(
+    ffi.Pointer<wpCollidableState> collidable_state,
+  ) {
+    return _collidable_state_get_dart_owner(
+      collidable_state,
+    );
+  }
+
+  late final _collidable_state_get_dart_ownerPtr = _lookup<
+          ffi
+          .NativeFunction<ffi.Handle Function(ffi.Pointer<wpCollidableState>)>>(
+      'collidable_state_get_dart_owner');
+  late final _collidable_state_get_dart_owner =
+      _collidable_state_get_dart_ownerPtr
+          .asFunction<Object Function(ffi.Pointer<wpCollidableState>)>();
+
+  ffi.Pointer<ffi.Float> collidable_state_get_matrix(
+    ffi.Pointer<wpCollidableState> motion_state,
+  ) {
+    return _collidable_state_get_matrix(
+      motion_state,
+    );
+  }
+
+  late final _collidable_state_get_matrixPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Pointer<ffi.Float> Function(
+              ffi.Pointer<wpCollidableState>)>>('collidable_state_get_matrix');
+  late final _collidable_state_get_matrix =
+      _collidable_state_get_matrixPtr.asFunction<
+          ffi.Pointer<ffi.Float> Function(ffi.Pointer<wpCollidableState>)>();
+
+  void collidable_state_matrix_updated(
+    ffi.Pointer<wpCollidableState> collidable_state,
+  ) {
+    return _collidable_state_matrix_updated(
+      collidable_state,
+    );
+  }
+
+  late final _collidable_state_matrix_updatedPtr = _lookup<
+          ffi
+          .NativeFunction<ffi.Void Function(ffi.Pointer<wpCollidableState>)>>(
+      'collidable_state_matrix_updated');
+  late final _collidable_state_matrix_updated =
+      _collidable_state_matrix_updatedPtr
+          .asFunction<void Function(ffi.Pointer<wpCollidableState>)>();
 
   /// Shapes.
   ffi.Pointer<wpShape> create_box_shape(
@@ -918,33 +946,42 @@ class _SymbolAddresses {
       get create_collidable => _library._create_collidablePtr;
   ffi.Pointer<
           ffi.NativeFunction<
-              ffi.Void Function(ffi.Pointer<wpCollidable>, ffi.Handle)>>
-      get collidable_set_dart_owner => _library._collidable_set_dart_ownerPtr;
-  ffi.Pointer<
-          ffi.NativeFunction<ffi.Handle Function(ffi.Pointer<wpCollidable>)>>
-      get collidable_get_dart_owner => _library._collidable_get_dart_ownerPtr;
-  ffi.Pointer<
-          ffi.NativeFunction<
               ffi.Void Function(
                   ffi.Pointer<wpCollidable>, ffi.Pointer<wpShape>)>>
       get collidable_set_shape => _library._collidable_set_shapePtr;
-  ffi.Pointer<
-          ffi.NativeFunction<
-              ffi.Pointer<ffi.Float> Function(ffi.Pointer<wpCollidable>)>>
-      get collidable_get_raw_transform =>
-          _library._collidable_get_raw_transformPtr;
-  ffi.Pointer<
-          ffi.NativeFunction<
-              ffi.Void Function(
-                  ffi.Pointer<wpCollidable>, ffi.Pointer<ffi.Float>)>>
-      get collidable_set_raw_transform =>
-          _library._collidable_set_raw_transformPtr;
   ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<wpCollidable>)>>
       get destroy_collidable => _library._destroy_collidablePtr;
   ffi.Pointer<
           ffi.NativeFunction<
               ffi.Pointer<wpBody> Function(ffi.Float, ffi.Pointer<wpShape>)>>
       get create_rigid_body => _library._create_rigid_bodyPtr;
+  ffi.Pointer<
+          ffi.NativeFunction<
+              ffi.Pointer<wpCollidableState> Function(
+                  ffi.Pointer<wpCollidable>,
+                  ffi.Handle,
+                  ffi.Pointer<
+                      ffi.NativeFunction<ffi.Void Function(ffi.Handle)>>)>>
+      get collidable_create_state => _library._collidable_create_statePtr;
+  ffi.Pointer<
+          ffi.NativeFunction<
+              ffi.Void Function(ffi.Pointer<wpCollidableState>, ffi.Handle)>>
+      get collidable_state_set_dart_owner =>
+          _library._collidable_state_set_dart_ownerPtr;
+  ffi.Pointer<
+          ffi
+          .NativeFunction<ffi.Handle Function(ffi.Pointer<wpCollidableState>)>>
+      get collidable_state_get_dart_owner =>
+          _library._collidable_state_get_dart_ownerPtr;
+  ffi.Pointer<
+          ffi.NativeFunction<
+              ffi.Pointer<ffi.Float> Function(ffi.Pointer<wpCollidableState>)>>
+      get collidable_state_get_matrix =>
+          _library._collidable_state_get_matrixPtr;
+  ffi.Pointer<
+          ffi.NativeFunction<ffi.Void Function(ffi.Pointer<wpCollidableState>)>>
+      get collidable_state_matrix_updated =>
+          _library._collidable_state_matrix_updatedPtr;
   ffi.Pointer<
           ffi.NativeFunction<
               ffi.Pointer<wpShape> Function(ffi.Float, ffi.Float, ffi.Float)>>
@@ -1285,3 +1322,5 @@ final class wpShape extends ffi.Opaque {}
 final class wpCollidable extends ffi.Opaque {}
 
 final class wpBody extends ffi.Opaque {}
+
+final class wpCollidableState extends ffi.Opaque {}

@@ -1,16 +1,37 @@
 part of '../physics3d.dart';
 
+void _updateCollidableTransform(Object? collidable) {
+  if (collidable == null) {
+    return;
+  }
+  assert(collidable is Collidable);
+  (collidable as Collidable)._xform._runListeners();
+}
+
+// TODO(johnmccutchan): We should close this somehow.
+final _updateCollidableTransformCallback =
+    ffi.NativeCallable<ffi.Void Function(ffi.Handle)>.isolateLocal(
+        _updateCollidableTransform);
+
 class Collidable implements ffi.Finalizable {
   static final _finalizer =
       ffi.NativeFinalizer(bindings.addresses.destroy_collidable.cast());
 
-  ffi.Pointer<wpCollidable> _nativeCollidable;
+  final ffi.Pointer<wpCollidable> _nativeCollidable;
+  late final ffi.Pointer<wpCollidableState> _nativeCollidableState;
 
   CollisionShape? _shape;
+  late final Transform _xform;
 
   Collidable._(this._nativeCollidable) {
     _finalizer.attach(this, _nativeCollidable.cast(), detach: this);
-    bindings.collidable_set_dart_owner(_nativeCollidable, this);
+    _nativeCollidableState = bindings.collidable_create_state(_nativeCollidable,
+        this, _updateCollidableTransformCallback.nativeFunction);
+    _xform = Transform._(
+        this,
+        bindings
+            .collidable_state_get_matrix(_nativeCollidableState)
+            .asTypedList(16));
   }
 
   factory Collidable() {
@@ -29,20 +50,9 @@ class Collidable implements ffi.Finalizable {
             : ffi.Pointer<wpShape>.fromAddress(0));
   }
 
-  Transform get xform {
-    return Transform.fromList(bindings
-        .collidable_get_raw_transform(_nativeCollidable)
-        .asTypedList(16));
+  _notifyNativeCode() {
+    bindings.collidable_state_matrix_updated(_nativeCollidableState);
   }
 
-  set xform(Transform t) {
-    final storage = t.storage;
-    final a = malloc.allocate<ffi.Float>(4 * 16);
-    final array = a.asTypedList(16);
-    for (int i = 0; i < 16; i++) {
-      array[i] = storage[i];
-    }
-    bindings.collidable_set_raw_transform(_nativeCollidable, a);
-    malloc.free(a);
-  }
+  Transform get xform => _xform;
 }
